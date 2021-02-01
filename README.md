@@ -1,1 +1,2 @@
-# theory-algos-project
+### Theory of Algorithms project 2021
+
