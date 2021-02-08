@@ -34,12 +34,12 @@ Explain & why is it important?
 ## Software Requirements
 
 ## Running the Program
-1. In your command line terminal: <br>
-2. Navigate to the \program\ directory: <br>
-3. Compile the program: <br>
-4. Execute the program: <br>
+1. In your command line terminal: ```git clone https://github.com/GraceKeane/theory-algos-project.git```<br>
+2. Navigate to the <b> \program\ </b> directory: ```cd program```<br>
+3. Compile the program: ```make bitoperations```<br>
+4. Execute the program: ```./bitoperations```<br>
 
-- Add screencasts here & code snippets
+- Add screencasts to explain how to run & code snippets
 
 ## Project Implementation
 - Add code snippets & explain how my code works
@@ -54,4 +54,5 @@ Explain & why is it important?
 ## Referances
 [1] https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet <br>
 [2] https://dotcms.com/docs/latest/markdown-syntax <br>
+[3] https://www.nist.gov/publications/secure-hash-standard <br>
 
