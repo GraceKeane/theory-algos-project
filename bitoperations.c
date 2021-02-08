@@ -1,34 +1,53 @@
 #include <stdio.h>
 
-void bin_print(int i){
+void bin_print(unsigned int i){
     // Number of bits in an integer
-    int j = sizeof(int) * 8;
+    // sizeof - build in operator (unary)
+    int j = sizeof(unsigned int) * 8;
 
     // Temporary variable
     int k;
 
-    // EXPLANATION HERE...
+    // Loop over the number of bits in i
     for(j-- ; j >= 0; j--){
+        /*  
+            Notes: 
+            Ternary operator
+            ? - check true or false
+            1 - true  0 - false
+            -1 = always true val
+        */
+
+        // Pick out the j'th bit of i
+        // true if j'th bit is 1, else 0
         k = ((1 << j) & i) ? 1 : 0;
         printf("%d", k);
     }
 }
 
-// arg count & vector list of strings
+// Arg count & vector list of strings
+// Standard main signiture
 int main(int argc, char *argv[]){
 
-    int i = 0xf1; 
+    // Set i to a literal value - hard coded val
+    unsigned int i = 0x0f0f0f0f;
 
-    printf("Original: ");
+    printf("Original:\t");
+    // Prints out i in binary
     bin_print(i);
-    printf("\n");
+    printf("\t%x\t%u\n", i, i);
 
-    for(int j = 0; j < 40; j++){
-        // Bin printing
-        printf("%3d << %2d: ", i, j);
-        bin_print(i << j);
-        printf("\n");
+    // 32
+    int j = sizeof(unsigned int) * 8;
+
+    for(j--; j >=0; j--){
+        // 1 shifted left j times
+        bin_print(1 << j); printf("\n");
+        // i.
+        bin_print(i); printf("\n");
+        printf("__________________________________  &\n");
+        // (1 shifted left j times) bitwise logical and i
+        bin_print((1 << j) & i); printf("\n\n");
     }
-
     return 0;
 }
