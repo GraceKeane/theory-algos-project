@@ -20,6 +20,7 @@ Lecturer | Dr Ian McLoughlin
 - [Repository Description](#repository-description)
 - [SHA512 Overview](#sha512-overview)
 - [Software Requirements](#software-requirements)
+- [Command Line Installations](#command-line-installations)
 - [Running the Program](#running-the-program)
 - [Project Implementation](#project-implementation)
 - [Assignment Questions](#assignment-questions)
@@ -32,6 +33,17 @@ Description of your repository and its contents pitched at a knowledgeable outsi
 Explain & why is it important?
 
 ## Software Requirements
+1. [Windows 10 Education (recommended)](https://www.microsoft.com/en-ie/education/products/windows) <br>
+2. [WSL2 for Windows 10](https://docs.microsoft.com/en-us/windows/wsl/install-win10#manual-installation-steps)<br>
+3. [Debian](https://www.microsoft.com/en-us/p/debian/9msvkqc78pk6?SilentAuth=1&wa=wsignin1.0&activetab=pivot:overviewtab) <br>
+4. [Windows Terminal](https://www.microsoft.com/en-ie/p/windows-terminal/9n0dx20hk701?rtc=1&activetab=pivot:overviewtab)<br>
+5. [Visual Studio Code](https://code.visualstudio.com/download)
+
+## Command Line Installations
+<b>In windows terminal:</b> <br>
+Install make and gcc: ``` sudo apt install build-essential```<br>
+ZSH shell: ``` sudo apt install zsh``` <br>
+Nicer ZSH shell (optional): ``` sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" ```
 
 ## Running the Program
 1. In your command line terminal: ```git clone https://github.com/GraceKeane/theory-algos-project.git```<br>
