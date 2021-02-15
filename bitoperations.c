@@ -29,6 +29,12 @@ void bin_print(unsigned int i){
 // Standard main signiture
 int main(int argc, char *argv[]){
 
+    for(int i = 0; i < argc; i++){
+        printf("%s\n", argv[i]);
+    }
+    return 0;
+
+
     // Set i to a literal value - hard coded val
     unsigned int i = 0x0f0f0f0f;
 
