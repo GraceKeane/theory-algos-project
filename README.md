@@ -18,6 +18,7 @@ Lecturer | Dr Ian McLoughlin
 
 ## Contents
 - [Repository Description](#repository-description)
+- [Repository Contents](#repository-contents)
 - [SHA512 Overview](#sha512-overview)
 - [Software Requirements](#software-requirements)
 - [Command Line Installations](#command-line-installations)
@@ -28,6 +29,22 @@ Lecturer | Dr Ian McLoughlin
 
 ## Repository Description 
 Description of your repository and its contents pitched at a knowledgeable outsider.
+
+## Repository Contents
+
+```bash
+├── Images # Folders contains images discussed in README.md
+│   ├──  # Image 1
+│   └──  # Image 2
+├── Screencasts # Folder containing screencasts of how to set-up, deploy and run project
+│   ├── # Screencast 1
+│   ├── # Screencast 2
+│   └── # Screencast 3
+├── .gitignore # Text file listing files to ignore
+├── README.md # Full overview of project
+├── argc.c # File containing C code for testing lab exercices)
+├── bitoperations.c # File containing C code from lab exercices)
+```
 
 ## SHA512 Overview
 Explain & why is it important?
