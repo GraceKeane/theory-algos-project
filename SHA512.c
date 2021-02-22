@@ -5,9 +5,9 @@
 
 // Replacing word & pf (32 bits)
 // 64 bits for SHA512
-#define WORD uint32_t
+#define WORD uint64_t
 // X - prints hex val
-#define PF PRIX32
+#define PF PRIX64
 
 // Function called Ch that takes x,y,z as inputs
 // 32 bits 
