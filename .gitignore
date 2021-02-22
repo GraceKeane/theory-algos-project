@@ -1,6 +1,8 @@
 # Local executables
 bitoperations
 args
+SHA512
+Test
 
 # Prerequisites
 *.d

@@ -49,6 +49,13 @@ Description of your repository and its contents pitched at a knowledgeable outsi
 ## SHA512 Overview
 Explain & why is it important?
 
+The SHA512 is part of a set of crytographic hash functions designed by the United States National Security (NSA) an published in 2001 [4]. The SHA512 is a hashing algorithm that performs a hashing function on given data. The algorithm needs certain variables in order for the algorithm to be solved.
+1) A message schedule of eighty 64-bit words
+2) Eight working variables of 64 bits each
+3) A hash value of eight 64-bit words
+
+The final result of the SHA512  algorithm is a 512-bit message digest [3].
+
 ## Software Requirements
 1. [Windows 10 Education (recommended)](https://www.microsoft.com/en-ie/education/products/windows) <br>
 2. [WSL2 for Windows 10](https://docs.microsoft.com/en-us/windows/wsl/install-win10#manual-installation-steps)<br>
@@ -81,7 +88,12 @@ Nicer ZSH shell (optional): ``` sh -c "$(curl -fsSL https://raw.github.com/ohmyz
 <b>How difficult is it to find a hash digest beginning with at least twelve zeros?</b><br>
 
 ## Referances
-[1] https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet <br>
-[2] https://dotcms.com/docs/latest/markdown-syntax <br>
-[3] https://www.nist.gov/publications/secure-hash-standard <br>
+[1] GitHub, Markdown Cheetsheet, <br>
+https://github.com/adam-p/markdown-here/wiki/ <br>
+[2] dotcms, Markdown Syntax, <br>
+https://dotcms.com/docs/latest/markdown-syntax <br>
+[3] Secure Hash Standard, Quynh H. Dang, <br>
+https://www.nist.gov/publications/secure-hash-standard <br>
+[4] Wikipedia, SHA-2, <br>
+https://en.wikipedia.org/wiki/SHA-2 <br>
 
