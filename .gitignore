@@ -3,6 +3,7 @@ bitoperations
 args
 SHA512
 Test
+ChFunction
 
 # Prerequisites
 *.d

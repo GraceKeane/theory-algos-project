@@ -44,6 +44,10 @@ Description of your repository and its contents pitched at a knowledgeable outsi
 ├── README.md # Full overview of project
 ├── argc.c # File containing C code for testing lab exercices)
 ├── bitoperations.c # File containing C code from lab exercices)
+├── SHA512.c # SHA512 algorithm coded using C programming language
+├── Test.c # Relevant testing of the SHA512 algorithm
+
+
 ```
 
 ## SHA512 Overview
