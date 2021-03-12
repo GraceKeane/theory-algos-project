@@ -38,6 +38,7 @@
 #define sig0(x) ROTR(x,1)^ROTR(x,8)^SHR(x,7)
 #define sig1(x) ROTR(x,19)^ROTR(x,61)^SHR(x,6)
 
+// Section 4.2.3
 // 64 bits words [4]
 const WORD K[] = {
     0x428a2f98d728ae22, 0x7137449123ef65cd, 0xb5c0fbcfec4d3b2f, 0xe9b5dba58189dbbc,
@@ -61,6 +62,13 @@ const WORD K[] = {
     0x28db77f523047d84, 0x32caab7b40c72493, 0x3c9ebe0a15c9bebc, 0x431d67c49c100d4c,
     0x4cc5d4becb3e42b6, 0x597f299cfc657e2a, 0x5fcb6fab3ad6faec, 0x6c44198c4a475817
 };
+
+// Section 5.3.5
+// Initial hash value
+WORD H[] = {
+    0x6a09e667f3bcc908, 0xbb67ae8584caa73b, 0x3c6ef372fe94f82b, 0xa54ff53a5f1d36f1,
+    0x510e527fade682d1, 0x9b05688c2b3e6c1f, 0x1f83d9abfb41bd6b, 0x5be0cd19137e2179
+}
 
 int main(int argc, char *argv[]) {
 

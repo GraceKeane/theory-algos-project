@@ -3,7 +3,7 @@
 </h3>
 
 <h3 align="center">
-    A program written in C that calculates the SHA512 of an input
+    A program written in C that calculates the SHA512 of an input file
 </h4>
 
 ## Project Details
@@ -46,7 +46,8 @@ Description of your repository and its contents pitched at a knowledgeable outsi
 ├── bitoperations.c # File containing C code from lab exercices)
 ├── SHA512.c # SHA512 algorithm coded using C programming language
 ├── Test.c # Relevant testing of the SHA512 algorithm
-
+├── Preproc.c # Code to take in an input file
+├── input.txt # Input file
 
 ```
 
