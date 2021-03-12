@@ -1,52 +1,63 @@
 #include <stdio.h>
 #include <inttypes.h>
 
+#define WORD uint64_t
+#define PF PRIX64
+#define W 64
 #define BYTE uint8_t
 
-void bin_print(BYTE i){
-    // Number of bits in an integer
-    // sizeof - build in operator (unary)
-    int j = sizeof(BYTE) * 8;
-
-    // Temporary variable
-    int k;
-
-    // Loop over the number of bits in i
-    for(j-- ; j >= 0; j--){
-        /*  
-            Ternary operator
-            ? - check true or false
-            1 - true  0 - false
-            -1 = always true val
-        */
-
-        // Pick out the j'th bit of i
-        // true if j'th bit is 1, else 0
-        k = ((1 << j) & i) ? 1 : 0;
-        printf("%d", k);
-    }
-}
+// Var related to each other package
+union Block {
+    // 64 * 64 bits
+    BYTE bytes [128];
+    // 16 * 64 bits
+    WORD words[16];
+};
 
 int main(int args, char *argv[]){
     // Error checking here. Testing
     // If file opened correctly
 
-    BYTE b;
+    int i = 0;
+    // Current block
+    union Block B;
+    uint64_t nobits = 0;
 
+    // File pointer
     FILE *f;
-    // r - read file
+    // Open file from command line for reading
     f = fopen(argv[1], "r");
 
+    // Number of bites to read
     size_t nobytes;
-
     // Read a byte from a file using fread
-    nobytes = fread(&b, 1, 1, f);
-    while (nobytes){
-        bin_print(b);
-        nobytes = fread(&b, 1, 1, f);
+    nobytes = fread(B.bytes, 1, 128, f);
+    // Tell command line how many read
+    printf("Read %d bytes. \n", nobytes);
+    // Update num of bits read
+    nobits = nobits + (8 * nobytes);
+    // Print the 16 64-bit words
+    for(i=0; i < 16; i++){
+        printf("%08" PF " ", B.words[i]);
+        if ((i + 1) % 8 == 0)
+        printf("\n");
     }
+    
+    while (!feof(f)){
+        nobytes = fread(&B.bytes, 1, 128, f);
+        printf("Read %d bytes. \n", nobytes);
+        nobits = nobits + (8 * nobytes);
+
+        // Print the 16 64-bit words
+        for(i=0; i < 16; i++){
+            printf("%08" PF " ", B.words[i]);
+            if ((i + 1) % 8 == 0)
+            printf("\n");
+        }
+    }
+
     fclose(f);
-    printf("\n");
+    printf("Total bits read: %d. \n", nobits);
 
     return 0;
 }
