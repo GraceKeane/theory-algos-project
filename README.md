@@ -52,6 +52,10 @@ Description of your repository and its contents pitched at a knowledgeable outsi
 ```
 
 ## SHA512 Overview
+There are numerous secure hash algorithms such as the SHA-1, SHA-224, SHA-256, SHA-384, SHA-512, SHA-512/224 and SHA-512/256. These are used for computation of condensed representation of electronic data. When a message of any length  less than 2^64 bits (for SHA-1, SHA-224 and SHA-256) or less than 2^128 bits (for SHA-384, SHA-512, SHA-512/224 and SHA-512/256) is input to a hash algorithm. The result is a specific output also known as a message digest. These digests range in length from 160 to 512 bits, depending on the algorithm.
+
+The hash algorithms have secure in their name because, for a given algorithm, it is computationally infeasible to find a message that corresponds to a given message digest or to find two different messages that produce the same message digest. Any change at all to a message will give a different result.
+
 Explain & why is it important?
 
 The SHA512 is part of a set of crytographic hash functions designed by the United States National Security (NSA) an published in 2001 [4]. The SHA512 is a hashing algorithm that performs a hashing function on given data. The algorithm needs certain variables in order for the algorithm to be solved.
