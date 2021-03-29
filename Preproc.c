@@ -1,26 +1,33 @@
 #include <stdio.h>
+// Fixed number of bits
 #include <inttypes.h>
 
-#define WORD uint64_t
+#define WORD uint64_t 
 #define PF PRIX64
 #define W 64
 #define BYTE uint8_t
 
 // Var related to each other package
+// SHA works on blocks of 1024 bits
 union Block {
-    // 64 * 64 bits
-    BYTE bytes[128];
+    // 8 * 128 bits
+    BYTE bytes[128]; // correct num
     // 16 * 64 bits
-    WORD words[64];
-    uint64_t sixf[16];
+    WORD words[16];  // correct num
+    // 64 * 8
+    uint64_t sixf[8];
 };
 
-// Enum is essentially a flag
+// Enum is essentially a flag for
+// keeping track of input message/ padding
 enum Status {
     READ, PAD, END
 };
 
 // Get next block
+// Return 1 if it created a new block from original message 
+// or padding
+// Returns 0 if all padded message has already been consumed
 int next_block(FILE *f, union Block *B, enum Status *S, uint64_t *nobits){
     // Number of bites to read
     size_t nobytes;
@@ -28,8 +35,8 @@ int next_block(FILE *f, union Block *B, enum Status *S, uint64_t *nobits){
     if(*S == END){
         return 0;
     } else if (*S == READ){
-        // Try to read 64 bytes
-        nobytes = fread(B->bytes, 1, 128, f);
+        // Try to read 128 bytes from file
+        nobytes = fread(B->bytes, 1, 128, f); // correct
         // Calculate total bits read so far
         *nobits = *nobits + (8 * nobytes);
 

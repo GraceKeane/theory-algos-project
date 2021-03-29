@@ -18,7 +18,6 @@ Lecturer | Dr Ian McLoughlin
 
 ## Contents
 - [Repository Description](#repository-description)
-- [Repository Contents](#repository-contents)
 - [SHA512 Overview](#sha512-overview)
 - [Software Requirements](#software-requirements)
 - [Command Line Installations](#command-line-installations)
@@ -27,19 +26,16 @@ Lecturer | Dr Ian McLoughlin
 - [Assignment Questions](#assignment-questions)
 - [Referances](#referances)
 
-## Repository Description 
-Description of your repository and its contents pitched at a knowledgeable outsider.
-
-## Repository Contents
+## Repository Description
 
 ```bash
 ├── Images # Folders contains images discussed in README.md
 │   ├──  # Image 1
 │   └──  # Image 2
+│   └──  # Image 3
+│   └──  # Image 4
 ├── Screencasts # Folder containing screencasts of how to set-up, deploy and run project
-│   ├── # Screencast 1
-│   ├── # Screencast 2
-│   └── # Screencast 3
+│   ├── # Screencast 
 ├── .gitignore # Text file listing files to ignore
 ├── README.md # Full overview of project
 ├── argc.c # File containing C code for testing lab exercices)
@@ -58,12 +54,7 @@ The hash algorithms have secure in their name because, for a given algorithm, it
 
 Explain & why is it important?
 
-The SHA512 is part of a set of crytographic hash functions designed by the United States National Security (NSA) an published in 2001 [4]. The SHA512 is a hashing algorithm that performs a hashing function on given data. The algorithm needs certain variables in order for the algorithm to be solved.
-1) A message schedule of eighty 64-bit words
-2) Eight working variables of 64 bits each
-3) A hash value of eight 64-bit words
-
-The final result of the SHA512  algorithm is a 512-bit message digest [3].
+The SHA512 is part of a set of crytographic hash functions designed by the United States National Security (NSA) an published in 2001 [4]. The SHA512 is a hashing algorithm that performs a hashing function on given data such as an input file for this project. The final result of the SHA512  algorithm is a 512-bit message digest [3].
 
 ## Software Requirements
 1. [Windows 10 Education (recommended)](https://www.microsoft.com/en-ie/education/products/windows) <br>
@@ -81,13 +72,36 @@ Nicer ZSH shell (optional): ``` sh -c "$(curl -fsSL https://raw.github.com/ohmyz
 ## Running the Program
 1. In your command line terminal: ```git clone https://github.com/GraceKeane/theory-algos-project.git```<br>
 2. Navigate to the <b> \program\ </b> directory: ```cd program```<br>
-3. Compile the program: ```make bitoperations```<br>
-4. Execute the program: ```./bitoperations```<br>
+3. Compile the program: ```make SHA512```<br>
+4. Execute the program: ```./SHA512```<br>
 
 - Add screencasts to explain how to run & code snippets
 
 ## Project Implementation
-- Add code snippets & explain how my code works
+### Creating the SHA512 functions
+SHA512 uses six logical functions, where each function operates on 64-bit words, which are represented as x,y, and z. The result of each function is a new 64-bit word.
+
+*Code snippet goes here*
+
+### Declare SHA512 Constants
+Declare a specific sequence of eighty constant 64-bit words. These words represent the first sixty-four bits of the fractional parts of the cube roots of the eighty prime numbers. 
+
+<b>Code snippet goes here</b>
+
+### Preprocessing - 1) Padding the message
+Ensuring the message is a multiple of 1024 bits. The end of the padded message is a multiple of 1024 bits.  
+
+<b>Code snippet goes here</b>
+
+### Preprocessing - 2) Parsing the message into message blocks
+The message and its padding are parsed into <i>N</i> 1024-bit blocks. Since the 1024 bits of the input block may be expressed as 64-bit words, the first 64 bits <i>i</i> are donated <i>M</i> to the power of <i>0(i)</i>, the next 64 bits are to the power of <i>1(i)</i> and so on until <i>15(i)</i>.
+
+<b>Code snippet goes here</b>
+
+### Preprocessing - 3) Setting the initial hash value
+The initial hash value <i>H(0)</i> must be set. The size and number of words depends on the message digest. For SHA512 the initial hash value consists of the following eight 64-bit words, in hex. These words were obtained by taking the first 64 bits of the fractional parts of the square roots of the first eight prime numbers.
+
+<b>Code snippet goes here</b>
 
 ## Assignment Questions 
 <b>Why can't we reverse the SHA512 algorithm to retrieve the original message from a hash digest?</b><br>
