@@ -29,9 +29,17 @@ enum Status {
 // or padding
 // Returns 0 if all padded message has already been consumed
 int next_block(FILE *f, union Block *B, enum Status *S, uint64_t *nobits){
+    
+    // File error handling
+    if(f == NULL){
+        printf("Error opening file");
+        return 0;
+    } else {
+    
     // Number of bites to read
     size_t nobytes;
     
+    // Check if status is end
     if(*S == END){
         return 0;
     } else if (*S == READ){
@@ -41,27 +49,32 @@ int next_block(FILE *f, union Block *B, enum Status *S, uint64_t *nobits){
         *nobits = *nobits + (8 * nobytes);
 
         if(nobytes == 128){
+            // This happens when we can read 64 bytes from f
             return 1;
         }
 
-        // Enough room for padding
-        // 100?
-        else if(nobytes <= 100){
+        // step 3
+        // Enough room for padding 128 - 9 = 119
+        else if(nobytes < 119){
             // Append a 1 bit 
-            B->bytes[nobytes++] = 0x80; 
+            // This happens when have enough room for padding
+            B->bytes[nobytes] = 0x80;
+            nobytes = nobytes + 1; 
             // Append enough 0 bits, leaving 128 at the end
-            while (nobytes++ < 128){
+            for (; nobytes < 119; nobytes++){
+                // Keep adding 0's
                 B->bytes[nobytes] = 0x00;
             }
 
             // Append length of original input (CHECK ENDIANESS)
-            B->sixf[15] = *nobits;
+            B->sixf[7] = *nobits;
             // Last block
+            // Set status to end
             *S = END;
         } else {
             // Got to the end of the input message
             // Not enough room in this block for all the padding
-            // Append a 1 bit and 15 0 bits to make a full byte
+            // Append a 1 bit and 7 0 bits to make a full byte
 
             // check 0x80
             B->bytes[nobytes] = 0x80;
@@ -72,19 +85,21 @@ int next_block(FILE *f, union Block *B, enum Status *S, uint64_t *nobits){
             // Change the status to PAD
             *S = PAD;
         }
-    } else if(*S == PAD){
-        nobytes = 0;
-        // Append 0 bits
-        while (nobytes++ < 128){
-            B->bytes[nobytes] = 0x00;
-        }
-        // Append no bits as an int
-        B->sixf[15] = *nobits;
-        // Change the status to PAD
-        *S = PAD;
-    }
 
-    return 1;
+        // Dont have enough padding to do the last block
+        } else if(*S == PAD){
+            nobytes = 0;
+            // Append 0 bits
+            for (nobytes = 0; nobytes < 119; nobytes++){
+                B->bytes[nobytes] = 0x00;
+            }
+            // Append no bits as an int  CHECK ENDINESS
+            B->sixf[7] = *nobits;
+            // Change the status to PAD
+            *S = PAD;
+        }
+        return 1;
+    }
 }
 
 int main(int args, char *argv[]){
@@ -100,20 +115,27 @@ int main(int args, char *argv[]){
 
     // File pointer
     FILE *f;
-    // Open file from command line for reading
-    f = fopen(argv[1], "r");
 
-    // Loop through preprocessed blocks from input
-    while (next_block(f, &B, &S, &nobits)){
-        // Print the 16 64-bit words
-        for(i=0; i < 16; i++){
-            printf("%08" PF " ", B.words[i]);
+    // File error handling
+    if(f == NULL){
+        printf("Error opening file");
+        return 0;
+    } else {
+        // Open file from command line for reading
+        f = fopen(argv[1], "r");
+
+        // Loop through preprocessed blocks from input
+        while (next_block(f, &B, &S, &nobits)){
+            // Print the 16 64-bit words
+            for(i=0; i < 16; i++){
+                printf("%08" PF " ", B.words[i]);
+            }
+            printf("\n");
         }
-        printf("\n");
+
+        fclose(f);
+        printf("Total bits read: %d. \n", nobits);
+
+        return 0;
     }
-
-    fclose(f);
-    printf("Total bits read: %d. \n", nobits);
-
-    return 0;
 }
