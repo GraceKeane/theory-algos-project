@@ -59,9 +59,8 @@ int next_block(FILE *f, union Block *B, enum Status *S, uint64_t *nobits){
             // Append a 1 bit 
             // This happens when have enough room for padding
             B->bytes[nobytes] = 0x80;
-            nobytes = nobytes + 1; 
             // Append enough 0 bits, leaving 128 at the end
-            for (; nobytes < 119; nobytes++){
+            for (nobytes++; nobytes < 119; nobytes++){
                 // Keep adding 0's
                 B->bytes[nobytes] = 0x00;
             }
@@ -79,7 +78,8 @@ int next_block(FILE *f, union Block *B, enum Status *S, uint64_t *nobits){
             // check 0x80
             B->bytes[nobytes] = 0x80;
             // Append 0 bits
-            while (nobytes++ < 128){
+            for (nobytes++; nobytes < 128; nobytes++){
+                // Error: trying to write to B->nobytes[128]
                 B->bytes[nobytes] = 0x00;
             }
             // Change the status to PAD
@@ -96,7 +96,7 @@ int next_block(FILE *f, union Block *B, enum Status *S, uint64_t *nobits){
             // Append no bits as an int  CHECK ENDINESS
             B->sixf[7] = *nobits;
             // Change the status to PAD
-            *S = PAD;
+            *S = END;
         }
         return 1;
     }
@@ -106,7 +106,8 @@ int main(int args, char *argv[]){
     // Error checking here. Testing
     // If file opened correctly
 
-    int i = 0;
+    // Iterator
+    int i;
     // Current block
     union Block B;
     uint64_t nobits = 0;
@@ -132,8 +133,9 @@ int main(int args, char *argv[]){
             }
             printf("\n");
         }
-
+        // Close this file
         fclose(f);
+        // Print total number of bits read
         printf("Total bits read: %d. \n", nobits);
 
         return 0;
