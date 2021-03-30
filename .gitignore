@@ -4,8 +4,10 @@ args
 SHA512
 Test
 ChFunction
-Preproc
+preproc
 emptyexec
+funcs
+SHA512
 
 # Prerequisites
 *.d

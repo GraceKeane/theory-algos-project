@@ -1,5 +1,7 @@
 #include <stdio.h>
 
+// Showing how the bitoperations work
+
 void bin_print(unsigned int i){
     // Number of bits in an integer
     // sizeof - build in operator (unary)

@@ -6,6 +6,10 @@
     A program written in C that calculates the SHA512 of an input file
 </h4>
 
+<p align="center">
+  <img src="./Images/GMIT.jpeg" width=700 height=300/>
+</p>
+
 ## Project Details
 Heading  | Details
 -------- | -------------------------------------
@@ -81,12 +85,14 @@ Nicer ZSH shell (optional): ``` sh -c "$(curl -fsSL https://raw.github.com/ohmyz
 ### Creating the SHA512 functions
 SHA512 uses six logical functions, where each function operates on 64-bit words, which are represented as x,y, and z. The result of each function is a new 64-bit word.
 
-*Code snippet goes here*
+<b>Code snippet goes here</b>
 
 ### Declare SHA512 Constants
 Declare a specific sequence of eighty constant 64-bit words. These words represent the first sixty-four bits of the fractional parts of the cube roots of the eighty prime numbers. 
 
-<b>Code snippet goes here</b>
+<p align="center">
+  <img src="./Images/SHA512-Constants.PNG" width=700 height=500/>
+</p>
 
 ### Preprocessing - 1) Padding the message
 Ensuring the message is a multiple of 1024 bits. The end of the padded message is a multiple of 1024 bits.  

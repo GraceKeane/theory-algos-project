@@ -2,6 +2,8 @@
 // Fixed number of bits
 #include <inttypes.h>
 
+// File to do all preprocessing
+
 #define WORD uint64_t 
 #define PF PRIX64
 #define W 64

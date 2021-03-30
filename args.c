@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+// Sample command line arguments here
 // Referance
 // https://www.gnu.org/software/libc/manual/html_node/Example-of-Getopt.html
 
