@@ -7,7 +7,7 @@
 </h4>
 
 <p align="center">
-  <img src="./Images/GMIT.jpeg" width=600 height=200/>
+  <img src="./Images/GMIT.jpeg" width=600 height=250/>
 </p>
 
 ## Project Details
@@ -27,6 +27,9 @@ Lecturer | Dr Ian McLoughlin
 - [Command Line Installations](#command-line-installations)
 - [Running the Program](#running-the-program)
 - [Project Implementation](#project-implementation)
+- [Testing](#testing)
+- [Error Handling](#error-handling)
+- [Command Line Arguments](#command-line-arguments)
 - [Assignment Questions](#assignment-questions)
 - [Referances](#referances)
 
@@ -76,9 +79,9 @@ Nicer ZSH shell (optional): ``` sh -c "$(curl -fsSL https://raw.github.com/ohmyz
 
 ## Running the Program
 1. In your command line terminal: ```git clone https://github.com/GraceKeane/theory-algos-project.git```<br>
-2. Navigate to the <b> \program\ </b> directory: ```cd program```<br>
+2. Navigate to the <b> \program\ </b> directory: ```cd theory-algos-project```<br>
 3. Compile the program: ```make SHA512```<br>
-4. Execute the program: ```./SHA512```<br>
+4. Execute the program: ```./SHA512 input.txt```<br>
 
 - Add screencasts to explain how to run & code snippets
 
@@ -92,7 +95,7 @@ SHA512 uses six logical functions, where each function operates on 64-bit words,
 Declare a specific sequence of eighty constant 64-bit words. These words represent the first sixty-four bits of the fractional parts of the cube roots of the eighty prime numbers. 
 
 <p align="center">
-  <img src="./Images/SHA512-Constants.PNG" width=600 height=300/>
+  <img src="./Images/SHA512-Constants.PNG" width=650 height=300/>
 </p>
 
 ### Preprocessing - 1) Padding the message
@@ -126,6 +129,12 @@ Address  | Value
 
 
 <b>Code snippet goes here</b>
+
+### Testing
+
+### Error Handling
+
+### Command Line Arguments
 
 ## Assignment Questions 
 <b>Why can't we reverse the SHA512 algorithm to retrieve the original message from a hash digest?</b><br>

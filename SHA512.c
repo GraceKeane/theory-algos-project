@@ -9,9 +9,9 @@
 const int _i = 1;
 #define islilend() ((*(char*)&_i) != 0)
 
-#define WLEN 64
+#define WLEN 64 
 #define WORD uint64_t 
-#define PF PRIX64
+#define PF PRIx64
 #define BYTE uint8_t
 
 /*
@@ -23,8 +23,8 @@ const int _i = 1;
 // Maj function - majority vote
 #define MAJ(_x,_y,_z) ((_x & _y) ^ (_x & _z) ^ (_y & _z))
 
-#define ROTL(_x,_n) ((_x << _n) | (_x >> (WLEN - _n))
-#define ROTR(_x,_n) (_x >> _n) | (_x << (WLEN - _n))
+#define ROTL(_x,_n) ((_x << _n) | (_x >> ((sizeof(_x)*8) - _n)))
+#define ROTR(_x,_n) ((_x >> _n)  | (_x << ((sizeof(_x)*8) - _n)))
 // Shift right
 #define SHR(_x,_n) (_x >> _n)
 
@@ -85,10 +85,6 @@ int next_block(FILE *f, union Block *M, enum Status *S, uint64_t *nobits){
     
     // File error handling -> TODO add more error handling
     // & test -> error handling not working properly
-    if(f == NULL){
-        printf("Error opening file");
-        return 0;
-    } else {
     
     // Number of bites to read
     size_t nobytes;
@@ -107,12 +103,12 @@ int next_block(FILE *f, union Block *M, enum Status *S, uint64_t *nobits){
 
           // step 3
           // Enough room for padding? 128 - 9 = 119
-        } else if(nobytes < 119){
+        } else if(nobytes < 112){
             // Append a 1 bit 
             // This executes when program has enough room for padding
             M->bytes[nobytes] = 0x80;
             // Append enough 0 bits, leaving 128 at the end
-            for (nobytes++; nobytes < 119; nobytes++){
+            for (nobytes++; nobytes < 112; nobytes++){
                 // Keep adding 0's
                 M->bytes[nobytes] = 0x00;
             }
@@ -139,15 +135,15 @@ int next_block(FILE *f, union Block *M, enum Status *S, uint64_t *nobits){
         // Executes when program does not have enough padding  for the last block
         } else if(*S == PAD){
             // Append 0 bits
-            for (nobytes = 0; nobytes < 119; nobytes++){
+            for (nobytes = 0; nobytes < 112; nobytes++){
                 M->bytes[nobytes] = 0x00;
             }
             // Append no bits as an int & checking endiness
             M->sixf[7] = (islilend() ? bswap_64 (*nobits) : *nobits);
             // Change the status to PAD
             *S = END;
+        
         }
-    }
 
     // Swap the byte order of the words if we're little endian.
     if (islilend())
@@ -205,7 +201,7 @@ int next_hash(union Block *M, WORD H[]){
         a = T1 + T2;
     }
 
-    /* Step 4 - Cal next hash from currect message block
+    /* Step 4 - Calculate next hash from currect message block
        and current hash value.
     */
     H[0] = a + H[0];

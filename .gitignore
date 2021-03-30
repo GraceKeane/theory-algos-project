@@ -8,6 +8,7 @@ preproc
 emptyexec
 funcs
 SHA512
+endian
 
 # Prerequisites
 *.d
