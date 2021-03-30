@@ -7,7 +7,7 @@
 </h4>
 
 <p align="center">
-  <img src="./Images/GMIT.jpeg" width=700 height=300/>
+  <img src="./Images/GMIT.jpeg" width=600 height=200/>
 </p>
 
 ## Project Details
@@ -34,12 +34,13 @@ Lecturer | Dr Ian McLoughlin
 
 ```bash
 ├── Images # Folders contains images discussed in README.md
-│   ├──  # Image 1
-│   └──  # Image 2
+│   ├──  # GMIT.jpeg
+│   └──  # SHA512-Constants.PNG
 │   └──  # Image 3
 │   └──  # Image 4
 ├── Screencasts # Folder containing screencasts of how to set-up, deploy and run project
-│   ├── # Screencast 
+│   ├── # Screencast 1
+|   └── # Screencast 2
 ├── .gitignore # Text file listing files to ignore
 ├── README.md # Full overview of project
 ├── argc.c # File containing C code for testing lab exercices)
@@ -91,7 +92,7 @@ SHA512 uses six logical functions, where each function operates on 64-bit words,
 Declare a specific sequence of eighty constant 64-bit words. These words represent the first sixty-four bits of the fractional parts of the cube roots of the eighty prime numbers. 
 
 <p align="center">
-  <img src="./Images/SHA512-Constants.PNG" width=700 height=500/>
+  <img src="./Images/SHA512-Constants.PNG" width=600 height=300/>
 </p>
 
 ### Preprocessing - 1) Padding the message
@@ -106,6 +107,23 @@ The message and its padding are parsed into <i>N</i> 1024-bit blocks. Since the 
 
 ### Preprocessing - 3) Setting the initial hash value
 The initial hash value <i>H(0)</i> must be set. The size and number of words depends on the message digest. For SHA512 the initial hash value consists of the following eight 64-bit words, in hex. These words were obtained by taking the first 64 bits of the fractional parts of the square roots of the first eight prime numbers.
+
+<b>Code snippet goes here</b>
+
+### Hash Computation
+
+<b>Code snippet goes here</b>
+
+### Solving Big-Endian
+Big endian stores the most significant byte in the smallest address. An example of this can be seen in the table below.
+
+Address  | Value
+-------- | ------
+1000     | 12
+1001     | 34
+1002     | 56
+1003     | 78 
+
 
 <b>Code snippet goes here</b>
 
@@ -125,4 +143,6 @@ https://dotcms.com/docs/latest/markdown-syntax <br>
 https://www.nist.gov/publications/secure-hash-standard <br>
 [4] Wikipedia, SHA-2, <br>
 https://en.wikipedia.org/wiki/SHA-2 <br>
+[5] IBM Developer; Writing endian-independent code in C <br>
+https://developer.ibm.com/technologies/systems/articles/au-endianc
 
