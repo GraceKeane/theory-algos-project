@@ -95,7 +95,7 @@ SHA512 uses six logical functions, where each function operates on 64-bit words,
 Declare a specific sequence of eighty constant 64-bit words. These words represent the first sixty-four bits of the fractional parts of the cube roots of the eighty prime numbers. 
 
 <p align="center">
-  <img src="./Images/SHA512-Constants.PNG" width=650 height=300/>
+  <img src="./Images/SHA512-Constants.PNG" width=550 height=400/>
 </p>
 
 ### Preprocessing - 1) Padding the message
@@ -130,11 +130,11 @@ Address  | Value
 
 <b>Code snippet goes here</b>
 
-### Testing
+## Testing
 
-### Error Handling
+## Error Handling
 
-### Command Line Arguments
+## Command Line Arguments
 
 ## Assignment Questions 
 <b>Why can't we reverse the SHA512 algorithm to retrieve the original message from a hash digest?</b><br>

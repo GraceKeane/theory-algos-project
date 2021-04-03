@@ -9,10 +9,9 @@
 const int _i = 1;
 #define islilend() ((*(char*)&_i) != 0)
 
-#define WLEN 64 
 #define WORD uint64_t 
 #define PF PRIx64
-#define BYTE uint8_t
+#define BYTE uint16_t
 
 /*
     Setting up functions
@@ -25,6 +24,7 @@ const int _i = 1;
 
 #define ROTL(_x,_n) ((_x << _n) | (_x >> ((sizeof(_x)*8) - _n)))
 #define ROTR(_x,_n) ((_x >> _n)  | (_x << ((sizeof(_x)*8) - _n)))
+
 // Shift right
 #define SHR(_x,_n) (_x >> _n)
 
@@ -38,7 +38,7 @@ const int _i = 1;
 union Block {
     BYTE bytes[128]; 
     WORD words[16]; 
-    uint64_t sixf[8];
+    uint64_t sixf[16];
 };
 
 // Enum is essentially a flag for keeping
@@ -94,15 +94,15 @@ int next_block(FILE *f, union Block *M, enum Status *S, uint64_t *nobits){
         return 0;
     } else if (*S == READ){
         // Try to read 128 bytes from file
-        nobytes = fread(M->bytes, 1, 128, f); // correct
+        nobytes = fread(M->bytes, 1, 128, f); 
         // Calculate total bits read so far
-        *nobits = *nobits + (8 * nobytes);
+        *nobits = *nobits + (8 * nobytes);  // 8 correct
 
         if(nobytes == 128){
             // This happens when we can read 64 bytes from f
+            return 1; //
 
           // step 3
-          // Enough room for padding? 128 - 9 = 119
         } else if(nobytes < 112){
             // Append a 1 bit 
             // This executes when program has enough room for padding
@@ -114,7 +114,7 @@ int next_block(FILE *f, union Block *M, enum Status *S, uint64_t *nobits){
             }
 
             // Append length of original input & checking endiness
-            M->sixf[7] = (islilend() ? bswap_64 (*nobits) : *nobits);
+            M->sixf[15] = (islilend() ? bswap_64(*nobits) : *nobits);
             // Last block
             // Set status to end
             *S = END;
@@ -132,22 +132,21 @@ int next_block(FILE *f, union Block *M, enum Status *S, uint64_t *nobits){
             *S = PAD;
         }
 
-        // Executes when program does not have enough padding  for the last block
+        // Executes when program does not have enough padding for the last block
         } else if(*S == PAD){
             // Append 0 bits
-            for (nobytes = 0; nobytes < 112; nobytes++){
+            for (nobytes = 0; nobytes < 128; nobytes++){
                 M->bytes[nobytes] = 0x00;
             }
             // Append no bits as an int & checking endiness
-            M->sixf[7] = (islilend() ? bswap_64 (*nobits) : *nobits);
+            M->sixf[15] = (islilend() ? bswap_64(*nobits) : *nobits);
             // Change the status to PAD
             *S = END;
-        
         }
 
-    // Swap the byte order of the words if we're little endian.
+    // Swap the byte order of the words if little endian.
     if (islilend())
-        for (int i = 0; i < 16; i++)
+        for (int i = 0; i < 8; i++) // 8 is correct
             M->words[i] = bswap_32(M->words[i]);
 
     return 1;
@@ -155,13 +154,10 @@ int next_block(FILE *f, union Block *M, enum Status *S, uint64_t *nobits){
 
 /*
     Step 1, 2, 3, 4 from Sec 6.4.2 - Message Schedule
-
     Function to calculate the next hash values.
     (H_0 -> H_1 -> H_2 -> ... -> H_N)
-
     Hash values calculated with corresponding
     message. e.g. H_1 uses M_2 to calculate H_2.
-
     Message block is made up of 1024 bits.
 */
 int next_hash(union Block *M, WORD H[]){
@@ -173,7 +169,7 @@ int next_hash(union Block *M, WORD H[]){
 
     // Step 1
     for(t = 0; t < 16; t++)
-         W[t] = M->words[t];
+        W[t] = M->words[t];
     for (t = 16; t < 80; t++)
         W[t] = sig1(W[t-2]) + W[t-7] + sig0(W[t-15]) + W[t-16];
 
@@ -217,7 +213,7 @@ int next_hash(union Block *M, WORD H[]){
 }
 
 /*
-
+    Function that actuallt does the SHA512 computation
 */
 int sha512(FILE *f, WORD H[]){
     // Function that performs the SHA512 algo on message file
@@ -247,7 +243,7 @@ int sha512(FILE *f, WORD H[]){
     Prints out the H array with final hash value. When
     the function is completed the file is then closed.
 */
-int main(int args, char *argv[]){
+int main(int argc, char *argv[]){
     
     // Initial hash value (described in preprocessing section)
     // H is a local variable
@@ -266,12 +262,11 @@ int main(int args, char *argv[]){
     sha512(f, H);
 
     // Print the SHA512 hash of f
-    for (int i = 0; i < 8; i++)
-        printf("%08" PF, H[i]);
+    for (int i = 0; i < 8; i++) 
+        printf("%016" PF, H[i]);
     printf("\n");
     
     // Close this file
     fclose(f);
-
     return 0;
 }
