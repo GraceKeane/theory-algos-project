@@ -11,23 +11,19 @@ const int _i = 1;
 
 #define WORD uint64_t 
 #define PF PRIx64
-#define BYTE uint16_t
+#define BYTE uint16_t 
 
 /*
     Setting up functions
 */
-
+#define ROTL(_x,_n) ((_x << _n) | (_x >> ((sizeof(_x)*8) - _n)))
+#define ROTR(_x,_n) ((_x >> _n) | (_x << ((sizeof(_x)*8) - _n)))
 // Ch function - choose bits
 #define CH(_x,_y,_z) ((_x & _y) ^ (~_x & _z))
 // Maj function - majority vote
 #define MAJ(_x,_y,_z) ((_x & _y) ^ (_x & _z) ^ (_y & _z))
-
-#define ROTL(_x,_n) ((_x << _n) | (_x >> ((sizeof(_x)*8) - _n)))
-#define ROTR(_x,_n) ((_x >> _n)  | (_x << ((sizeof(_x)*8) - _n)))
-
 // Shift right
 #define SHR(_x,_n) (_x >> _n)
-
 #define SIG0(_x) (ROTR(_x,28) ^ ROTR(_x,34) ^ ROTR(_x,39))
 #define SIG1(_x) (ROTR(_x,14) ^ ROTR(_x,18) ^ ROTR(_x,41))
 #define sig0(_x) (ROTR(_x,1) ^ ROTR(_x,8) ^ SHR(_x,7))
@@ -36,9 +32,9 @@ const int _i = 1;
 // Types
 // SHA512 works on blocks of 1024 bits
 union Block {
-    BYTE bytes[128]; 
-    WORD words[16]; 
-    uint64_t sixf[16];
+    BYTE bytes[128]; // correct
+    WORD words[16];  // correct
+    uint64_t sixf[16]; // correct
 };
 
 // Enum is essentially a flag for keeping
@@ -96,7 +92,7 @@ int next_block(FILE *f, union Block *M, enum Status *S, uint64_t *nobits){
         // Try to read 128 bytes from file
         nobytes = fread(M->bytes, 1, 128, f); 
         // Calculate total bits read so far
-        *nobits = *nobits + (8 * nobytes);  // 8 correct
+        *nobits = *nobits + (8 * nobytes);  // 8 correct was 16
 
         if(nobytes == 128){
             // This happens when we can read 64 bytes from f
@@ -135,7 +131,7 @@ int next_block(FILE *f, union Block *M, enum Status *S, uint64_t *nobits){
         // Executes when program does not have enough padding for the last block
         } else if(*S == PAD){
             // Append 0 bits
-            for (nobytes = 0; nobytes < 128; nobytes++){
+            for (nobytes = 0; nobytes < 128; nobytes++){ // 112
                 M->bytes[nobytes] = 0x00;
             }
             // Append no bits as an int & checking endiness
@@ -260,6 +256,10 @@ int main(int argc, char *argv[]){
     f = fopen(argv[1], "r");
 
     sha512(f, H);
+
+    printf("\n| BSc (Hons) in Computing in Software Development |");
+    printf("\n|      Theory of Algorithms Project 2021          |");
+    printf("\n|                SHA512 Algorithm                 |\n\n");
 
     // Print the SHA512 hash of f
     for (int i = 0; i < 8; i++) 

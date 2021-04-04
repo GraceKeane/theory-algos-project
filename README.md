@@ -27,9 +27,10 @@ Lecturer | Dr Ian McLoughlin
 - [Command Line Installations](#command-line-installations)
 - [Running the Program](#running-the-program)
 - [Project Implementation](#project-implementation)
-- [Testing](#testing)
 - [Error Handling](#error-handling)
 - [Command Line Arguments](#command-line-arguments)
+- [Expected Output](#expected-output)
+- [Testing](#testing)
 - [Assignment Questions](#assignment-questions)
 - [Referances](#referances)
 
@@ -56,13 +57,14 @@ Lecturer | Dr Ian McLoughlin
 ```
 
 ## SHA512 Overview
-There are numerous secure hash algorithms such as the SHA-1, SHA-224, SHA-256, SHA-384, SHA-512, SHA-512/224 and SHA-512/256. These are used for computation of condensed representation of electronic data. When a message of any length  less than 2^64 bits (for SHA-1, SHA-224 and SHA-256) or less than 2^128 bits (for SHA-384, SHA-512, SHA-512/224 and SHA-512/256) is input to a hash algorithm. The result is a specific output also known as a message digest. These digests range in length from 160 to 512 bits, depending on the algorithm.
+There are numerous secure hash algorithms such as the SHA-1, SHA-224, SHA-256, SHA-384, SHA-512, SHA-512/224 and SHA-512/256. These are used for computation of condensed representation of electronic data. When a message of any length  less than ![equation1](https://latex.codecogs.com/gif.latex?2%5E%7B64%7D) bits (for SHA-1, SHA-224 and SHA-256) or less than ![equation2](https://latex.codecogs.com/gif.latex?2%5E%7B128%7D) bits (for SHA-384, SHA-512, SHA-512/224 and SHA-512/256) is input to a hash algorithm. The result is a specific output also known as a message digest. These digests range in length from 160 to 512 bits, depending on the algorithm.
 
 The hash algorithms have secure in their name because, for a given algorithm, it is computationally infeasible to find a message that corresponds to a given message digest or to find two different messages that produce the same message digest. Any change at all to a message will give a different result.
 
+The SHA512 is part of a set of crytographic hash functions designed by the United States National Security (NSA) and published in 2001 [4]. The SHA512 is a hashing algorithm that performs a hashing function on given data such as an input file for this project. But Hashing algorithms are also commonly used in security, digital certificates and even blockchains [6]. The final result of the SHA512  algorithm is a 512-bit message digest [3].
+
 Explain & why is it important?
 
-The SHA512 is part of a set of crytographic hash functions designed by the United States National Security (NSA) an published in 2001 [4]. The SHA512 is a hashing algorithm that performs a hashing function on given data such as an input file for this project. The final result of the SHA512  algorithm is a 512-bit message digest [3].
 
 ## Software Requirements
 1. [Windows 10 Education (recommended)](https://www.microsoft.com/en-ie/education/products/windows) <br>
@@ -87,16 +89,26 @@ Nicer ZSH shell (optional): ``` sh -c "$(curl -fsSL https://raw.github.com/ohmyz
 
 ## Project Implementation
 ### Creating the SHA512 functions
-SHA512 uses six logical functions, where each function operates on 64-bit words, which are represented as x,y, and z. The result of each function is a new 64-bit word.
+SHA512 uses six logical functions, where each function operates on 64-bit words, which are represented as x, y, and z. The result of each function is a new 64-bit word. The SHA512 functions are defined below as well as in section 4.1.3 of the Secure Hash Standard. Figure 2 gives the corresponding c code for these functions. 
 
-<b>Code snippet goes here</b>
+<p align="center">
+  <img src="./Images/SHS_Functions.PNG" width=450 height=300/>
+</p>
+<i>Figure 1. Secure Hash Algorithm Functions [3]</i>
+
+
+<p align="center">
+  <img src="./Images/Functions.PNG" width=450 height=300/>
+</p>
+<i>Figure 2. Code implementation of the Secure Hash Algorithm</i>
 
 ### Declare SHA512 Constants
-Declare a specific sequence of eighty constant 64-bit words. These words represent the first sixty-four bits of the fractional parts of the cube roots of the eighty prime numbers. 
+Declare a specific sequence of eighty constant 64-bit words. These words represent the first sixty-four bits of the fractional parts of the cube roots of the eighty prime numbers. These constants are defined in section 4.2.3 of the Secure Hash Standard.
 
 <p align="center">
   <img src="./Images/SHA512-Constants.PNG" width=550 height=400/>
 </p>
+<i>Figure 3. Code implementation of the Secure Hash Algorithm constants</i>
 
 ### Preprocessing - 1) Padding the message
 Ensuring the message is a multiple of 1024 bits. The end of the padded message is a multiple of 1024 bits.  
@@ -130,11 +142,13 @@ Address  | Value
 
 <b>Code snippet goes here</b>
 
-## Testing
-
 ## Error Handling
 
 ## Command Line Arguments
+
+## Expected Output
+
+## Testing
 
 ## Assignment Questions 
 <b>Why can't we reverse the SHA512 algorithm to retrieve the original message from a hash digest?</b><br>
@@ -154,4 +168,6 @@ https://www.nist.gov/publications/secure-hash-standard <br>
 https://en.wikipedia.org/wiki/SHA-2 <br>
 [5] IBM Developer; Writing endian-independent code in C <br>
 https://developer.ibm.com/technologies/systems/articles/au-endianc
+[6] Medium, Cryptography: Explaining SHA-512 <br>
+https://medium.com/@zaid960928/cryptography-explaining-sha-512-ad896365a0c1
 
