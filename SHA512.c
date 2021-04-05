@@ -3,6 +3,11 @@
 // Package for retrieving fixed number of bits
 #include <inttypes.h>
 
+// Error handling packages
+#include <errno.h>
+#include <string.h>
+#include <stdlib.h>
+
 // Determine the endianess of your machine. Adapted from:
 // https://developer.ibm.com/technologies/systems/articles/au-endianc
 #include <byteswap.h>
@@ -11,7 +16,7 @@ const int _i = 1;
 
 #define WORD uint64_t 
 #define PF PRIx64
-#define BYTE uint16_t 
+#define BYTE uint16_t  
 
 /*
     Setting up functions
@@ -104,7 +109,7 @@ int next_block(FILE *f, union Block *M, enum Status *S, uint64_t *nobits){
             // This executes when program has enough room for padding
             M->bytes[nobytes] = 0x80;
             // Append enough 0 bits, leaving 128 at the end
-            for (nobytes++; nobytes < 112; nobytes++){
+            for (nobytes++; nobytes < 128; nobytes++){
                 // Keep adding 0's
                 M->bytes[nobytes] = 0x00;
             }
@@ -131,7 +136,7 @@ int next_block(FILE *f, union Block *M, enum Status *S, uint64_t *nobits){
         // Executes when program does not have enough padding for the last block
         } else if(*S == PAD){
             // Append 0 bits
-            for (nobytes = 0; nobytes < 128; nobytes++){ // 112
+            for (nobytes = 0; nobytes < 112; nobytes++){ // 112
                 M->bytes[nobytes] = 0x00;
             }
             // Append no bits as an int & checking endiness
@@ -252,21 +257,32 @@ int main(int argc, char *argv[]){
 
     // File pointer
     FILE *f;
+
     // Open file from command line for reading
     f = fopen(argv[1], "r");
 
-    sha512(f, H);
+    if (f == NULL){
 
-    printf("\n| BSc (Hons) in Computing in Software Development |");
-    printf("\n|      Theory of Algorithms Project 2021          |");
-    printf("\n|                SHA512 Algorithm                 |\n\n");
+        printf("Value of errno: %d\n", errno);
+        printf("Error opening the file: %s\n", strerror(errno));
+  
+        exit(EXIT_FAILURE);
+        exit(1);
+    } else {
 
-    // Print the SHA512 hash of f
-    for (int i = 0; i < 8; i++) 
-        printf("%016" PF, H[i]);
-    printf("\n");
-    
-    // Close this file
-    fclose(f);
-    return 0;
+        sha512(f, H);
+
+        printf("\n| BSc (Hons) in Computing in Software Development |");
+        printf("\n|      Theory of Algorithms Project 2021          |");
+        printf("\n|                SHA512 Algorithm                 |\n\n");
+
+        // Print the SHA512 hash of f
+        for (int i = 0; i < 8; i++) 
+            printf("%016" PF, H[i]);
+        printf("\n");
+        
+        // Close this file
+        fclose(f);
+        return 0;
+    }
 }

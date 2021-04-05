@@ -89,18 +89,12 @@ Nicer ZSH shell (optional): ``` sh -c "$(curl -fsSL https://raw.github.com/ohmyz
 
 ## Project Implementation
 ### Creating the SHA512 functions
-SHA512 uses six logical functions, where each function operates on 64-bit words, which are represented as x, y, and z. The result of each function is a new 64-bit word. The SHA512 functions are defined below as well as in section 4.1.3 of the Secure Hash Standard. Figure 2 gives the corresponding c code for these functions. 
+SHA512 uses six logical functions, where each function operates on 64-bit words, which are represented as x, y, and z. The result of each function is a new 64-bit word. The SHA512 functions are defined below as well as in section 4.1.3 of the Secure Hash Standard. Figure 1 gives the corresponding c code for these functions. 
 
 <p align="center">
-  <img src="./Images/SHS_Functions.PNG" width=450 height=300/>
+  <img src="./Images/Functions.PNG" width=550 height=400/>
 </p>
-<i>Figure 1. Secure Hash Algorithm Functions [3]</i>
-
-
-<p align="center">
-  <img src="./Images/Functions.PNG" width=450 height=300/>
-</p>
-<i>Figure 2. Code implementation of the Secure Hash Algorithm</i>
+<i>Figure 1. Code implementation of the Secure Hash Algorithm</i>
 
 ### Declare SHA512 Constants
 Declare a specific sequence of eighty constant 64-bit words. These words represent the first sixty-four bits of the fractional parts of the cube roots of the eighty prime numbers. These constants are defined in section 4.2.3 of the Secure Hash Standard.
@@ -108,7 +102,7 @@ Declare a specific sequence of eighty constant 64-bit words. These words represe
 <p align="center">
   <img src="./Images/SHA512-Constants.PNG" width=550 height=400/>
 </p>
-<i>Figure 3. Code implementation of the Secure Hash Algorithm constants</i>
+<i>Figure 2. Code implementation of the Secure Hash Algorithm constants</i>
 
 ### Preprocessing - 1) Padding the message
 Ensuring the message is a multiple of 1024 bits. The end of the padded message is a multiple of 1024 bits.  
