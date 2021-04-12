@@ -3,11 +3,6 @@
 // Package for retrieving fixed number of bits
 #include <inttypes.h>
 
-// Error handling packages
-#include <errno.h>
-#include <string.h>
-#include <stdlib.h>
-
 // Determine the endianess of your machine. Adapted from:
 // https://developer.ibm.com/technologies/systems/articles/au-endianc
 #include <byteswap.h>
@@ -43,12 +38,13 @@ union Block {
 };
 
 // Enum is essentially a flag for keeping
-// track of input message/ padding
+// track of input message / padding
 enum Status {
     READ, PAD, END
 };
 
-// 64 bits words from Secure Hash Standard documentation
+// Section 4.2.3 of the Secure Hash Standard (SHS)
+// SHA512 64 bits words
 const WORD K[] = {
     0x428a2f98d728ae22, 0x7137449123ef65cd, 0xb5c0fbcfec4d3b2f, 0xe9b5dba58189dbbc,
     0x3956c25bf348b538, 0x59f111f1b605d019, 0x923f82a4af194f9b, 0xab1c5ed5da6d8118,
@@ -73,6 +69,7 @@ const WORD K[] = {
 };
 
 /*
+    Section 6.4 of the Secure Hash Standard
     Carrying out the preprocessing (3 steps)
 */
 
@@ -84,73 +81,75 @@ const WORD K[] = {
 */
 int next_block(FILE *f, union Block *M, enum Status *S, uint64_t *nobits){
     
-    // File error handling -> TODO add more error handling
-    // & test -> error handling not working properly
-    
-    // Number of bites to read
-    size_t nobytes;
-    
-    // Check if status is end
-    if(*S == END){
-        return 0;
-    } else if (*S == READ){
-        // Try to read 128 bytes from file
-        nobytes = fread(M->bytes, 1, 128, f); 
-        // Calculate total bits read so far
-        *nobits = *nobits + (8 * nobytes);  // 8 correct was 16
+    // Error handling
+    if (f == NULL){
+        printf("Error when opening file")
+    } else {
+        // Number of bites to read
+        size_t nobytes;
+        
+        // Check if status is end
+        if(*S == END){
+            return 0;
+        } else if (*S == READ){
+            // Try to read 128 bytes from file
+            nobytes = fread(M->bytes, 1, 128, f); 
+            // Calculate total bits read so far
+            *nobits = *nobits + (8 * nobytes);  // 8 correct was 16
 
-        if(nobytes == 128){
-            // This happens when we can read 64 bytes from f
-            return 1; //
+            if(nobytes == 128){
+                // This happens when we can read 64 bytes from f
+                return 1; //
 
-          // step 3
-        } else if(nobytes < 112){
-            // Append a 1 bit 
-            // This executes when program has enough room for padding
-            M->bytes[nobytes] = 0x80;
-            // Append enough 0 bits, leaving 128 at the end
-            for (nobytes++; nobytes < 128; nobytes++){
-                // Keep adding 0's
-                M->bytes[nobytes] = 0x00;
+            // step 3
+            } else if(nobytes < 112){
+                // Append a 1 bit 
+                // This executes when program has enough room for padding
+                M->bytes[nobytes] = 0x80;
+                // Append enough 0 bits, leaving 128 at the end
+                for (nobytes++; nobytes < 128; nobytes++){
+                    // Keep adding 0's
+                    M->bytes[nobytes] = 0x00;
+                }
+
+                // Append length of original input & checking endiness
+                M->sixf[15] = (islilend() ? bswap_64(*nobits) : *nobits);
+                // Last block
+                // Set status to end
+                *S = END;
+            } else {
+                /*
+                    Got to the end of the input message but not enough room in 
+                    this block for all the padding.
+                */
+                M->bytes[nobytes] = 0x80;
+                // Append 0 bits
+                for (nobytes++; nobytes < 128; nobytes++){
+                    M->bytes[nobytes] = 0x00;
+                }
+                // Change the status to PAD
+                *S = PAD;
             }
 
-            // Append length of original input & checking endiness
-            M->sixf[15] = (islilend() ? bswap_64(*nobits) : *nobits);
-            // Last block
-            // Set status to end
-            *S = END;
-        } else {
-            /*
-                Got to the end of the input message but not enough room in 
-                this block for all the padding.
-            */
-            M->bytes[nobytes] = 0x80;
-            // Append 0 bits
-            for (nobytes++; nobytes < 128; nobytes++){
-                M->bytes[nobytes] = 0x00;
+            // Executes when program does not have enough padding for the last block
+            } else if(*S == PAD){
+                // Append 0 bits
+                for (nobytes = 0; nobytes < 112; nobytes++){ // 112
+                    M->bytes[nobytes] = 0x00;
+                }
+                // Append no bits as an int & checking endiness
+                M->sixf[15] = (islilend() ? bswap_64(*nobits) : *nobits);
+                // Change the status to PAD
+                *S = END;
             }
-            // Change the status to PAD
-            *S = PAD;
-        }
 
-        // Executes when program does not have enough padding for the last block
-        } else if(*S == PAD){
-            // Append 0 bits
-            for (nobytes = 0; nobytes < 112; nobytes++){ // 112
-                M->bytes[nobytes] = 0x00;
-            }
-            // Append no bits as an int & checking endiness
-            M->sixf[15] = (islilend() ? bswap_64(*nobits) : *nobits);
-            // Change the status to PAD
-            *S = END;
-        }
+        // Swap the byte order of the words if little endian.
+        if (islilend())
+            for (int i = 0; i < 8; i++) // 8 is correct
+                M->words[i] = bswap_32(M->words[i]);
 
-    // Swap the byte order of the words if little endian.
-    if (islilend())
-        for (int i = 0; i < 8; i++) // 8 is correct
-            M->words[i] = bswap_32(M->words[i]);
-
-    return 1;
+        return 1;
+    }
 }
 
 /*
@@ -217,11 +216,12 @@ int next_hash(union Block *M, WORD H[]){
     Function that actuallt does the SHA512 computation
 */
 int sha512(FILE *f, WORD H[]){
-    // Function that performs the SHA512 algo on message file
-
+    /*
+     Function that performs the SHA512 algo on message file
+    */
     // Message block
     union Block M;
-    // 64 bit integer to keep track of num bits
+    // 64 bit integer to keep track of the number of bits
     uint64_t nobits = 0;
     // Current status of the bits read
     enum Status S = READ;
@@ -261,13 +261,10 @@ int main(int argc, char *argv[]){
     // Open file from command line for reading
     f = fopen(argv[1], "r");
 
+    // Error handling
     if (f == NULL){
-
-        printf("Value of errno: %d\n", errno);
-        printf("Error opening the file: %s\n", strerror(errno));
-  
-        exit(EXIT_FAILURE);
-        exit(1);
+        printf("Error when opening file");
+        return 0;
     } else {
 
         sha512(f, H);
