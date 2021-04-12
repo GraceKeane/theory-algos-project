@@ -83,7 +83,7 @@ int next_block(FILE *f, union Block *M, enum Status *S, uint64_t *nobits){
     
     // Error handling
     if (f == NULL){
-        printf("Error when opening file")
+        printf("Error when opening file");
     } else {
         // Number of bites to read
         size_t nobytes;
