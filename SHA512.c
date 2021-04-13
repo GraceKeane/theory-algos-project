@@ -1,11 +1,18 @@
-// Standard C package
-#include <stdio.h>
-// Package for retrieving fixed number of bits
-#include <inttypes.h>
+// Author :     Grace Keane
+// Module :     Theory of Algorithms
+// Summary:     A program that executes the sha512 of an input
 
-// Determine the endianess of your machine. Adapted from:
-// https://developer.ibm.com/technologies/systems/articles/au-endianc
-#include <byteswap.h>
+#include <stdio.h>     // Input.Output
+#include <inttypes.h>  // Includes formatters for output
+#include <byteswap.h>  // Determine endianess
+
+#include <getopt.h>    // Command line argument functionality
+#include <stdlib.h>    // For additional getopt() functionality
+
+/*
+    Determine the endianess of your machine. Adapted from:
+    https://developer.ibm.com/technologies/systems/articles/au-endianc
+*/
 const int _i = 1;
 #define islilend() ((*(char*)&_i) != 0)
 
@@ -18,12 +25,13 @@ const int _i = 1;
 */
 #define ROTL(_x,_n) ((_x << _n) | (_x >> ((sizeof(_x)*8) - _n)))
 #define ROTR(_x,_n) ((_x >> _n) | (_x << ((sizeof(_x)*8) - _n)))
-// Ch function - choose bits
+// Ch function
 #define CH(_x,_y,_z) ((_x & _y) ^ (~_x & _z))
-// Maj function - majority vote
+// Maj function 
 #define MAJ(_x,_y,_z) ((_x & _y) ^ (_x & _z) ^ (_y & _z))
 // Shift right
 #define SHR(_x,_n) (_x >> _n)
+
 #define SIG0(_x) (ROTR(_x,28) ^ ROTR(_x,34) ^ ROTR(_x,39))
 #define SIG1(_x) (ROTR(_x,14) ^ ROTR(_x,18) ^ ROTR(_x,41))
 #define sig0(_x) (ROTR(_x,1) ^ ROTR(_x,8) ^ SHR(_x,7))
@@ -245,6 +253,11 @@ int sha512(FILE *f, WORD H[]){
     the function is completed the file is then closed.
 */
 int main(int argc, char *argv[]){
+
+    printf("\n Author: Grace Keane  BSc (Hons) in Computing in Software Development");
+    printf("\n Course: BSc (Hons) in Computing in Software Development             ");
+    printf("\n Module: Theory of Algorithms Project 2021                           ");
+    printf("\n Algorithm: SHA512                                               \n\n");
     
     // Initial hash value (described in preprocessing section)
     // H is a local variable
@@ -262,16 +275,12 @@ int main(int argc, char *argv[]){
     f = fopen(argv[1], "r");
 
     // Error handling
-    if (f == NULL){
+    if (argv[1] == NULL){
         printf("Error when opening file");
         return 0;
     } else {
 
         sha512(f, H);
-
-        printf("\n| BSc (Hons) in Computing in Software Development |");
-        printf("\n|      Theory of Algorithms Project 2021          |");
-        printf("\n|                SHA512 Algorithm                 |\n\n");
 
         // Print the SHA512 hash of f
         for (int i = 0; i < 8; i++) 
