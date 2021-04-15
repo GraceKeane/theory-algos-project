@@ -60,9 +60,7 @@ There are numerous secure hash algorithms such as the SHA-1, SHA-224, SHA-256, S
 
 The hash algorithms have secure in their name because, for a given algorithm, it is computationally infeasible to find a message that corresponds to a given message digest or to find two different messages that produce the same message digest. Any change at all to a message will give a different result.
 
-The SHA512 algorithm is part of a set of crytographic hash functions designed by the United States National Security (NSA) and published in 2001 [4]. The SHA512 is a hashing algorithm that performs a hashing function on given data such as an input file for this project [6].
-
-Hashing algorithms are primarily used to provide integrity [7].
+The SHA512 algorithm is part of a set of crytographic hash functions designed by the United States National Security (NSA) and published in 2001 [4]. Hashing algorithms are primarily used to provide integrity [7].
 
 ## Software Requirements
 1. [Windows 10 Education (recommended)](https://www.microsoft.com/en-ie/education/products/windows) <br>
@@ -94,23 +92,23 @@ Nicer ZSH shell (optional): ``` sh -c "$(curl -fsSL https://raw.github.com/ohmyz
 | --explain       | ```./SHA512 --explain``` | Displays a brief explanation of SHA512 including an ASCII high-level diagram|
 
 ## Project Implementation
-### Creating the SHA512 functions
-SHA512 uses six logical functions, where each function operates on 64-bit words, which are represented as x, y, and z. The result of each function is a new 64-bit word. The SHA512 functions are defined below as well as in section 4.1.3 of the Secure Hash Standard. 
+### Creating the SHA512 functions (Section 4.1.3)
+SHA512 uses six logical functions, where each function operates on 64-bit words, which are represented as x, y, and z. The result of each function is a new 64-bit word. The SHA512 functions are defined below through C code as well as in section 4.1.3 of the Secure Hash Standard. 
 
 ``` c
 #define ROTL(_x,_n) ((_x << _n) | (_x >> ((sizeof(_x)*8) - _n)))
 #define ROTR(_x,_n) ((_x >> _n) | (_x << ((sizeof(_x)*8) - _n)))
+#define SHR(_x,_n) (_x >> _n)
 #define CH(_x,_y,_z) ((_x & _y) ^ (~_x & _z))
 #define MAJ(_x,_y,_z) ((_x & _y) ^ (_x & _z) ^ (_y & _z))
-#define SHR(_x,_n) (_x >> _n)
 #define SIG0(_x) (ROTR(_x,28) ^ ROTR(_x,34) ^ ROTR(_x,39))
 #define SIG1(_x) (ROTR(_x,14) ^ ROTR(_x,18) ^ ROTR(_x,41))
 #define sig0(_x) (ROTR(_x,1) ^ ROTR(_x,8) ^ SHR(_x,7))
 #define sig1(_x) (ROTR(_x,19) ^ ROTR(_x,61) ^ SHR(_x,6))
 ``` 
 
-### Declare SHA512 Constants
-Declare a specific sequence of eighty constant 64-bit words. These words represent the first sixty-four bits of the fractional parts of the cube roots of the eighty prime numbers. These constants are defined in section 4.2.3 of the Secure Hash Standard.
+### Declare SHA512 Constants (Section 4.2.3)
+Declare a specific sequence of eighty constant 64-bit words. These words represent the first sixty-four bits of the fractional parts of the cube roots of the eighty prime numbers. These constants are defined in section 4.2.3 of the Secure Hash Standard. Below is a code example of how I defined these constants in my program.
 
 ``` c
 const WORD K[] = {
@@ -137,37 +135,88 @@ const WORD K[] = {
 };
 ```
 
-### Preprocessing - 1) Padding the message
-Ensuring the message is a multiple of 1024 bits. The end of the padded message is a multiple of 1024 bits.  
+### Preprocessing (Section 5)
+<b>Preprocessing consists of 3 steps which are padding the message, parsing the message into message blocks and setting the initial hash value.</b>
+
+#### Padding the message (Section 5.1.2)
+The purpose of padding is to ensure that the padded message is a multiple of 1024 bits. The end result of padding should be a message in a multiple of 1024 bits.
 
 <b>Code snippet goes here</b>
 
-### Preprocessing - 2) Parsing the message into message blocks
-The message and its padding are parsed into <i>N</i> 1024-bit blocks. Since the 1024 bits of the input block may be expressed as 64-bit words, the first 64 bits <i>i</i> are donated <i>M</i> to the power of <i>0(i)</i>, the next 64 bits are to the power of <i>1(i)</i> and so on until <i>15(i)</i>.
+#### Parsing the message into message blocks (Section 5.2.2)
+The message and its padding are parsed into <i>N</i> 1024-bit blocks. Since the 1024 bits of the input block may be expressed as 64-bit words, the first 64 bits <i>i</i> are donated ![equation3](https://latex.codecogs.com/svg.image?M\tfrac{(i)}{0})
+, the next 64 bits are to the power of ![equation4](https://latex.codecogs.com/svg.image?M\tfrac{(i)}{0})
+ and so on until ![equation5](https://latex.codecogs.com/svg.image?M\tfrac{(i)}{15}).
 
-<b>Code snippet goes here</b>
+#### Setting the initial hash value (Section 5.3.5)
+The initial hash value ![equation6](https://latex.codecogs.com/svg.image?H^{(0)}) must be initialised. The size and number of words depends on the message digest. For SHA512 the initial hash value consists of the following eight 64-bit words, in hex. These words were obtained by taking the first 64 bits of the fractional parts of the square roots of the first eight prime numbers.
 
-### Preprocessing - 3) Setting the initial hash value
-The initial hash value <i>H(0)</i> must be set. The size and number of words depends on the message digest. For SHA512 the initial hash value consists of the following eight 64-bit words, in hex. These words were obtained by taking the first 64 bits of the fractional parts of the square roots of the first eight prime numbers.
+``` c
+WORD H[] = {
+        0x6a09e667f3bcc908, 0xbb67ae8584caa73b, 0x3c6ef372fe94f82b, 0xa54ff53a5f1d36f1,
+        0x510e527fade682d1, 0x9b05688c2b3e6c1f, 0x1f83d9abfb41bd6b, 0x5be0cd19137e2179
+    };
+```
+### Hash Computation (Section 6.4.2)
+The SHA-512 hash computation uses functions and constants defined in section section 6.4.2 of the Secure Hash Standard documentation. The hash computation is made up of four steps.
 
-<b>Code snippet goes here</b>
+1) Prepare the message schedule
+``` c
+ for(t = 0; t < 16; t++)
+        W[t] = M->words[t];
+    for (t = 16; t < 80; t++)
+        W[t] = sig1(W[t-2]) + W[t-7] + sig0(W[t-15]) + W[t-16];
+``` 
+2) Initialize the eight working variables with the ![equation7](https://latex.codecogs.com/svg.image?i-1^{st}) hash values
+``` c
+a = H[0];
+b = H[1];
+c = H[2];
+d = H[3];
+e = H[4];
+f = H[5];
+g = H[6];
+h = H[7];
+``` 
 
-### Hash Computation
+3) Create a for loop to loop initialized from 0 - 79 
+``` c
+for(t = 0; t < 80; t++) {
+    T1 = h + SIG1(e) + CH(e, f, g) + K[t] + W[t];
+    T2 = SIG0(a) + MAJ(a, b, c);
+    h = g;
+    g = f;
+    f = e;
+    e = d + T1;
+    d = c;
+    c = b;
+    b = a;
+    a = T1 + T2;
+}
+``` 
 
-<b>Code snippet goes here</b>
+4) Compute the ![equation8](https://latex.codecogs.com/svg.image?i^{th}) intermediate hash value ![equation9](https://latex.codecogs.com/svg.image?H^{(i)})
+
+``` c
+H[0] = a + H[0];
+H[1] = b + H[1];
+H[2] = c + H[2];
+H[3] = d + H[3];
+H[4] = e + H[4];
+H[5] = f + H[5];
+H[6] = g + H[6];
+H[7] = h + H[7];
+``` 
 
 ### Solving Big-Endian
-Big endian stores the most significant byte in the smallest address. An example of this can be seen in the table below.
+Little and big endian are two ways of storing multibyte data-types ( int, float, etc). In little endian machines, the last byte of binary representation of the multibyte data-type is stored first. On the other hand, in big endian machines, first byte of binary representation of the multibyte data-type is stored first.
 
-Address  | Value
--------- | ------
-1000     | 12
-1001     | 34
-1002     | 56
-1003     | 78 
+Simple way of how I checked if my machine is big endian or little endian using Jupyter Notebook: 
 
-
-<b>Code snippet goes here</b>
+``` py
+from sys import byteorder
+print(byteorder)
+``` 
 
 ## Assignment Questions 
 <b>Why can't we reverse the SHA512 algorithm to retrieve the original message from a hash digest?</b><br>

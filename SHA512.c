@@ -17,7 +17,7 @@ const int _i = 1;
 #define islilend() ((*(char*)&_i) != 0)
 
 #define WORD uint64_t 
-#define PF PRIx64
+#define PF PRIx64 
 #define BYTE uint16_t  
 
 /*
@@ -154,7 +154,7 @@ int next_block(FILE *f, union Block *M, enum Status *S, uint64_t *nobits){
         // Swap the byte order of the words if little endian.
         if (islilend())
             for (int i = 0; i < 8; i++) // 8 is correct
-                M->words[i] = bswap_32(M->words[i]);
+                M->words[i] = bswap_64(M->words[i]);
 
         return 1;
     }
