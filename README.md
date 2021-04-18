@@ -51,8 +51,6 @@ This repository contains the C code to compute the SHA512 algorithm based on an 
 ├── test.c # Relevant testing of the SHA512 algorithm
 ├── input.txt # Input file
 ├── test.txt # Large input file
-
-
 ```
 
 ## SHA512 Overview
@@ -221,12 +219,18 @@ print(byteorder)
 ## Assignment Questions 
 <b>Why can't we reverse the SHA512 algorithm to retrieve the original message from a hash digest?</b><br>
 
-Hash algorithms are most commonly used for security. They provide encription using an algorithm and no key and are also known as "one-way hash functions" because there is no possible way to reverse an encription [7]. They are designed specifically to take in an input, compute the hash function and output a hashed value as shown in <i> figure ... </i>. This ensures that every bit of output is dependant upon every bit of the input. It prevents others from splitting the algorithm up and trying to reverse calculate an input from each of the output hash separately.  
+Hash algorithms such as the SHA-512 algorithm are most commonly used for security and for detecting if messages have been changed since the digests were generated. They provide encription using an algorithm and no key and are also known as "one-way hash functions" [A1]. There is no possible way to reverse the encription hence the reason they are called "hash" algorithms [7]. They are designed specifically to take in an input, compute the hash function and output a hashed value as shown in <i> figure 1 </i>. This ensures that every bit of output is dependant upon every bit of the input. It prevents others from splitting the algorithm up and trying to reverse calculate an input from each of the output hash separately.  
 
 <p align="center">
   <img src="./img/diagram.png" width=600 height=250/>
 </p>
-<i>Figure .... SHA algorithm diagram</i>
+<i>Figure 1, SHA algorithm diagram</i>
+
+The SHA-512 algorithm is designed to make finding the corresponding input to an output extremely dificult. If ones goal is to find an input that generates a given hash, there should be no way to do it that's faster than brute force - trying every input in turn until one works.
+
+Consider a simple example function 'OR'. If you applied this to an input function of 1 and 0 the solution would be 1. But now having known the answer you cannot revert post solution due to data loss. Instead you are left with three differant possible answers for example (1,1), (0,1) or (1,0). Only brute force could possibly find the correct input variables.
+
+But why is it important to not be able to reverse? Security?
 
 <b>Can you design an algorithm that, given enough time, will find input messages that give each of the possible 512-bit strings?</b><br>
 
@@ -249,4 +253,7 @@ https://medium.com/@zaid960928/cryptography-explaining-sha-512-ad896365a0c1 <br>
 https://www.sciencedirect.com/topics/computer-science/message-digest <br>
 [8] ScienceDirect, Hashing Algorithm, <br>
 https://www.sciencedirect.com/topics/computer-science/hashing-algorithm <br>
+
+## Article Referances
+[A1] Sumagita, M., Riadi, I., Sh, J.P.D.S. and Warungboto, U., 2018. Analysis of secure hash algorithm (SHA) 512 for encryption process on web based application. International Journal of Cyber-Security and Digital Forensics (IJCSDF), 7(4), pp.373-381.
 
