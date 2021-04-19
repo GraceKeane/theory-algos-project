@@ -5,8 +5,8 @@
 #include <stdio.h>     // Input.Output
 #include <inttypes.h>  // Includes formatters for output
 #include <byteswap.h>  // Determine endianess
-#include <getopt.h>    // Command line argument functionality
 #include <stdlib.h>    // For additional getopt() functionality
+#include <getopt.h>    // Command line argument functionality
 
 /*
     Determine the endianess of your machine. Adapted from:
@@ -240,6 +240,25 @@ int sha512(FILE *f, WORD H[]){
     return 0;
 }
 
+/* -------------------- Command Line Argument Outputs ------------------ */
+void cmd_line_args(int option) {
+    switch (option) {
+     case 0: // Case 0 - No command line arguments were entered
+        printf("\n*No command line argument specified, 'SHA512 --help' will list all valid command line arguments.\n");
+        printf("\nInput - 1: Perform SHA-512 on a File            ");
+        printf("\nInput - 2: Perform SHA-512 on a String        \n");
+        printf("\nChoose an option: ");
+        break;
+    case 1:
+        printf("\n Performing SHA-512 on an inputted file");
+        break;
+    case 2:
+        printf("Enter a string");
+    break;
+    }
+}
+
+
 /*
     Sets the initial hash value, opens file for reading 
     and sends a message to sha512 to calculate the hash 
@@ -249,7 +268,13 @@ int sha512(FILE *f, WORD H[]){
     Prints out the H array with final hash value. When
     the function is completed the file is then closed.
 */
-int main(int argc, char *argv[]){                             
+int main(int argc, char *argv[]){  
+
+    /* Input vars */
+    int option;
+    /* Declaration of file/string inputs */
+    char fileName[100];
+    char inputString[50];                      
     
     // Initial hash value (described in preprocessing section)
     // H is a local variable
@@ -265,6 +290,26 @@ int main(int argc, char *argv[]){
 
     // Open file from command line for reading
     f = fopen(argv[1], "r");
+
+    if (option == 2){
+        printf("Enter a String: ");
+        scanf("%s", inputString);
+
+         /* Open new file */        
+        f =  fopen("cmd-input/CMDInput.txt", "w");
+        /* Write user input to the file */ 
+        fprintf(f, "%s", inputString);
+        fclose(f);
+
+        /* Open the file to read */
+        f = fopen("cmd-input/CMDInput.txt", "rb");
+        printf("Processing String ...\nSHA512: ");
+        sha512(f, H);
+        fclose(f);
+    } else {
+        //printf("\nInvalid Input\nExiting ...\n");
+    }
+    
 
     // Error handling
     if (argv[1] == NULL){

@@ -3,7 +3,7 @@
 </h3>
 
 <h3 align="center">
-    A program written in C that calculates the SHA512 of an input file
+    A program written in C that calculates the SHA512 of an input
 </h4>
 
 <p align="center">
@@ -33,7 +33,7 @@ Lecturer | Dr Ian McLoughlin
 - [Referances](#referances)
 
 ## Repository Description
-This repository contains the C code to compute the SHA512 algorithm based on an input file. The result of the program is a SHA512 message digest. This program also incorporates error handling, a make file, command line arguments and testing.
+This repository contains the C code to compute the SHA512 algorithm based on an input. The result of the program is a SHA512 message digest. This program also incorporates error handling, a make file, command line arguments and testing.
 
 - Final image of project output will go here
 
@@ -53,11 +53,9 @@ This repository contains the C code to compute the SHA512 algorithm based on an 
 ```
 
 ## SHA512 Overview
-There are numerous secure hash algorithms such as the SHA-1, SHA-224, SHA-256, SHA-384, SHA-512, SHA-512/224 and SHA-512/256. These are used for computation of condensed representation of electronic data. When a message of any length  less than ![equation1](https://latex.codecogs.com/gif.latex?2%5E%7B64%7D) bits (for SHA-1, SHA-224 and SHA-256) or less than ![equation2](https://latex.codecogs.com/gif.latex?2%5E%7B128%7D) bits (for SHA-384, SHA-512, SHA-512/224 and SHA-512/256) is input to a hash algorithm. The result is a specific output also known as a message digest which is essentially a compact representation of the binary data recieved as input [8]. These digests range in length from 160 to 512 bits, depending on the algorithm.
+The SHA512 algorithm is part of a set of crytographic hash functions designed by the [United States National Security (NSA)](https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.180-4.pdf) and published in 2001 [4](https://en.wikipedia.org/wiki/SHA-2). Hashing algorithms are primarily used to provide integrity [7](https://www.sciencedirect.com/topics/computer-science/message-digest). There are numerous secure hash algorithms such as the SHA-1, SHA-224, SHA-256, SHA-384, SHA-512, SHA-512/224 and SHA-512/256. These are used for computation of condensed representation of electronic data. When a message of any length  less than ![equation1](https://latex.codecogs.com/gif.latex?2%5E%7B64%7D) bits (for SHA-1, SHA-224 and SHA-256) or less than ![equation2](https://latex.codecogs.com/gif.latex?2%5E%7B128%7D) bits (for SHA-384, SHA-512, SHA-512/224 and SHA-512/256) is input to a hash algorithm. The result is a specific output also known as a message digest which is essentially a compact representation of the binary data recieved as input [8](https://www.sciencedirect.com/topics/computer-science/hashing-algorithm). These digests range in length from 160 to 512 bits, depending on the algorithm.
 
 The hash algorithms have secure in their name because, for a given algorithm, it is computationally infeasible to find a message that corresponds to a given message digest or to find two different messages that produce the same message digest. Any change at all to a message will give a different result.
-
-The SHA512 algorithm is part of a set of crytographic hash functions designed by the United States National Security (NSA) and published in 2001 [4]. Hashing algorithms are primarily used to provide integrity [7].
 
 ## Software Requirements
 1. [Windows 10 Education (recommended)](https://www.microsoft.com/en-ie/education/products/windows) <br>
@@ -77,10 +75,30 @@ Nicer ZSH shell (optional): ``` sh -c "$(curl -fsSL https://raw.github.com/ohmyz
 2. Navigate to the <b> \program\ </b> directory: ```cd theory-algos-project```<br>
 3. Compile the program: ```make```<br>
 4. Execute the program: ```./SHA512 abc.txt```<br>
+5. Run tests: ```./tests.sh```
 
 - Add screencasts to explain how to run & code snippets
 
 ## Command Line Arguments
+
+The C programming language allows for the use of command-line arguments. Command-line arguments allow data to be provided to the program at runtime. Arguments can be passed to the main method if the main method is declared as follows.
+
+``` c
+int main(int argc, char *argv[]){  
+
+}
+```
+
+The program in this case can take two arguments, an integer called ```argc``` and a character array called ```*argv[]```
+
+- ```argc```
+  - Conventionally, argc, which stands for argument count, retrieves the amount of arguments the program has just taken. For example, if the following was ran ./SHA512 one two three, argc would be equal to four, since it includes the actual program declaration [9](http://117.3.71.125:8080/dspace/bitstream/DHKTDN/6554/1/The%20C%20Programming%20Language4603.pdf).
+
+- ```*argv[]```
+  - Meaning 'argument vector', argv[] is an array containing the command line arguments. Looking at the previous example, if the input was ./SHA512 one two three, argv[] would be of size four, the first index being SHA512, the second being one and so on [9](http://117.3.71.125:8080/dspace/bitstream/DHKTDN/6554/1/The%20C%20Programming%20Language4603.pdf).
+
+### Functional Command Line Arguments
+The table below contains a list of valid command-line arguments specific to the program, an example of how to input them and also their output. 
 
 | Valid Arguments | Input Example | Output |
 | :---:           |     :---:      |     :---: |
@@ -218,7 +236,7 @@ print(byteorder)
 ## Assignment Questions 
 <b>Why can't we reverse the SHA512 algorithm to retrieve the original message from a hash digest?</b><br>
 
-Hash algorithms such as the SHA-512 algorithm are most commonly used for security and for detecting if messages have been changed since the digests were generated. They provide encription using an algorithm and no key and are also known as "one-way hash functions" [A1]. There is no possible way to reverse the encription hence the reason they are called "hash" algorithms [7]. They are designed specifically to take in an input, compute the hash function and output a hashed value as shown in <i> figure 1 </i>. This ensures that every bit of output is dependant upon every bit of the input. It prevents others from splitting the algorithm up and trying to reverse calculate an input from each of the output hash separately.  
+Hash algorithms such as the SHA-512 algorithm are most commonly used for security and for detecting if messages have been changed since the digests were generated. They provide encription using an algorithm and no key and are also known as "one-way hash functions" [A1](https://www.researchgate.net/profile/Imam-Riadi-2/publication/327392778_Analysis_of_Secure_Hash_Algorithm_SHA_512_for_Encryption_Process_on_Web_Based_Application/links/5b8cbe5e4585151fd1447946/Analysis-of-Secure-Hash-Algorithm-SHA-512-for-Encryption-Process-on-Web-Based-Application.pdf). There is no possible way to reverse the encription hence the reason they are called "hash" algorithms [7](https://www.sciencedirect.com/topics/computer-science/message-digest). They are designed specifically to take in an input, compute the hash function and output a hashed value as shown in <i> figure 1 </i>. This ensures that every bit of output is dependant upon every bit of the input. It prevents others from splitting the algorithm up and trying to reverse calculate an input from each of the output hash separately.  
 
 <p align="center">
   <img src="./img/diagram.png" width=600 height=250/>
@@ -252,6 +270,8 @@ https://medium.com/@zaid960928/cryptography-explaining-sha-512-ad896365a0c1 <br>
 https://www.sciencedirect.com/topics/computer-science/message-digest <br>
 [8] ScienceDirect, Hashing Algorithm, <br>
 https://www.sciencedirect.com/topics/computer-science/hashing-algorithm <br>
+[9] The C Programming Language, Brian W.Kernighan, Dennis M. Ritchie.
+http://117.3.71.125:8080/dspace/bitstream/DHKTDN/6554/1/The%20C%20Programming%20Language4603.pdf <br>
 
 ## Article Referances
 [A1] Sumagita, M., Riadi, I., Sh, J.P.D.S. and Warungboto, U., 2018. Analysis of secure hash algorithm (SHA) 512 for encryption process on web based application. International Journal of Cyber-Security and Digital Forensics (IJCSDF), 7(4), pp.373-381.
