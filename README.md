@@ -41,16 +41,15 @@ This repository contains the C code to compute the SHA512 algorithm based on an 
 ├── img # Folders contains images discussed in README.md
 │   ├──  # logo.jpeg
 │   └──  # diagram.png
-├── screencasts # Folder containing screencasts of how to set-up, deploy and run project
+├── videos # Folder containing screencasts of how to set-up, deploy and run project
 │   ├── # Screencast 1
 |   └── # Screencast 2
 ├── .gitignore # Text file listing files to ignore
 ├── README.md # Full overview of project
-├── argc.c # getops from labs - to help me incorporate into sha512
-├── sha512.c # SHA512 algorithm coded using C programming language
-├── test.c # Relevant testing of the SHA512 algorithm
-├── input.txt # Input file
-├── test.txt # Large input file
+├── SHA512.c # SHA512 algorithm coded using C programming language
+├── abc.txt # Input file containing a string of "abc"
+├── Makefile # Makefile of the program
+├── tests.sh # Bash tests file to test if the algorithm if working correctly
 ```
 
 ## SHA512 Overview
@@ -76,8 +75,8 @@ Nicer ZSH shell (optional): ``` sh -c "$(curl -fsSL https://raw.github.com/ohmyz
 ## Running the Program
 1. In your command line terminal: ```git clone https://github.com/GraceKeane/theory-algos-project.git```<br>
 2. Navigate to the <b> \program\ </b> directory: ```cd theory-algos-project```<br>
-3. Compile the program: ```make SHA512```<br>
-4. Execute the program: ```./SHA512 input.txt```<br>
+3. Compile the program: ```make```<br>
+4. Execute the program: ```./SHA512 abc.txt```<br>
 
 - Add screencasts to explain how to run & code snippets
 
@@ -224,7 +223,7 @@ Hash algorithms such as the SHA-512 algorithm are most commonly used for securit
 <p align="center">
   <img src="./img/diagram.png" width=600 height=250/>
 </p>
-<i>Figure 1, SHA algorithm diagram</i>
+<i><b>Figure 1, SHA algorithm diagram</b></i>
 
 The SHA-512 algorithm is designed to make finding the corresponding input to an output extremely dificult. If ones goal is to find an input that generates a given hash, there should be no way to do it that's faster than brute force - trying every input in turn until one works.
 

@@ -9,6 +9,7 @@ emptyexec
 funcs
 endian
 sha512
+tests
 
 # Prerequisites
 *.d

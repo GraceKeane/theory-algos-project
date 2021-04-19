@@ -5,7 +5,6 @@
 #include <stdio.h>     // Input.Output
 #include <inttypes.h>  // Includes formatters for output
 #include <byteswap.h>  // Determine endianess
-
 #include <getopt.h>    // Command line argument functionality
 #include <stdlib.h>    // For additional getopt() functionality
 
@@ -14,11 +13,10 @@
     https://developer.ibm.com/technologies/systems/articles/au-endianc
 */
 const int _i = 1;
-#define islilend() ((*(char*)&_i) != 0)
-
+#define islilend() ((*(char *)&_i) != 0)
 #define WORD uint64_t 
 #define PF PRIx64 
-#define BYTE uint16_t  
+#define BYTE uint8_t  
 
 /*
     Setting up functions
@@ -40,9 +38,9 @@ const int _i = 1;
 // Types
 // SHA512 works on blocks of 1024 bits
 union Block {
-    BYTE bytes[128]; // correct
-    WORD words[16];  // correct
-    uint64_t sixf[16]; // correct
+    BYTE bytes[128]; 
+    WORD words[16];  
+    uint64_t sixf[16]; 
 };
 
 // Enum is essentially a flag for keeping
@@ -103,19 +101,18 @@ int next_block(FILE *f, union Block *M, enum Status *S, uint64_t *nobits){
             // Try to read 128 bytes from file
             nobytes = fread(M->bytes, 1, 128, f); 
             // Calculate total bits read so far
-            *nobits = *nobits + (8 * nobytes);  // 8 correct was 16
+            *nobits = *nobits + (8 * nobytes); 
 
             if(nobytes == 128){
                 // This happens when we can read 64 bytes from f
-                return 1; //
-
+                // Return nothing
             // step 3
-            } else if(nobytes < 112){
+            } else if(nobytes < 120){
                 // Append a 1 bit 
                 // This executes when program has enough room for padding
                 M->bytes[nobytes] = 0x80;
-                // Append enough 0 bits, leaving 128 at the end
-                for (nobytes++; nobytes < 128; nobytes++){
+                // Append enough 0 bits, leaving 120 at the end
+                for (nobytes++; nobytes < 120; nobytes++) { 
                     // Keep adding 0's
                     M->bytes[nobytes] = 0x00;
                 }
@@ -142,7 +139,7 @@ int next_block(FILE *f, union Block *M, enum Status *S, uint64_t *nobits){
             // Executes when program does not have enough padding for the last block
             } else if(*S == PAD){
                 // Append 0 bits
-                for (nobytes = 0; nobytes < 112; nobytes++){ // 112
+                for (nobytes = 0; nobytes < 120; nobytes++){ 
                     M->bytes[nobytes] = 0x00;
                 }
                 // Append no bits as an int & checking endiness
@@ -153,7 +150,7 @@ int next_block(FILE *f, union Block *M, enum Status *S, uint64_t *nobits){
 
         // Swap the byte order of the words if little endian.
         if (islilend())
-            for (int i = 0; i < 8; i++) // 8 is correct
+            for (int i = 0; i < 16; i++) 
                 M->words[i] = bswap_64(M->words[i]);
 
         return 1;
@@ -252,12 +249,7 @@ int sha512(FILE *f, WORD H[]){
     Prints out the H array with final hash value. When
     the function is completed the file is then closed.
 */
-int main(int argc, char *argv[]){
-
-    printf("\n Author: Grace Keane  BSc (Hons) in Computing in Software Development");
-    printf("\n Course: BSc (Hons) in Computing in Software Development             ");
-    printf("\n Module: Theory of Algorithms Project 2021                           ");
-    printf("\n Algorithm: SHA512                                               \n\n");
+int main(int argc, char *argv[]){                             
     
     // Initial hash value (described in preprocessing section)
     // H is a local variable
