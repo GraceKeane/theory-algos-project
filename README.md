@@ -82,7 +82,6 @@ Nicer ZSH shell (optional): ``` sh -c "$(curl -fsSL https://raw.github.com/ohmyz
 ## Command Line Arguments
 
 The C programming language allows for the use of command-line arguments. Command-line arguments allow data to be provided to the program at runtime. Arguments can be passed to the main method if the main method is declared as follows.
-
 ``` c
 int main(int argc, char *argv[]){  
 
@@ -103,7 +102,6 @@ The table below contains a list of valid command-line arguments specific to the 
 | Valid Arguments | Input Example | Output |
 | :---:           |     :---:      |     :---: |
 | --help          | ```./SHA512 --help``` | Will detail additional arguments and examples on how to execute them|
-| --test          | ```./SHA512 --test``` | Runs a suite of tests based on the program |
 | --explain       | ```./SHA512 --explain``` | Displays a brief explanation of SHA512 including an ASCII high-level diagram|
 
 ## Project Implementation
@@ -156,12 +154,24 @@ const WORD K[] = {
 #### Padding the message (Section 5.1.2)
 The purpose of padding is to ensure that the padded message is a multiple of 1024 bits. The end result of padding should be a message in a multiple of 1024 bits.
 
-<b>Code snippet goes here</b>
+``` c
+if(nobytes == 128){
+
+}
+```
 
 #### Parsing the message into message blocks (Section 5.2.2)
 The message and its padding are parsed into <i>N</i> 1024-bit blocks. Since the 1024 bits of the input block may be expressed as 64-bit words, the first 64 bits <i>i</i> are donated ![equation3](https://latex.codecogs.com/svg.image?M\tfrac{(i)}{0})
 , the next 64 bits are to the power of ![equation4](https://latex.codecogs.com/svg.image?M\tfrac{(i)}{0})
  and so on until ![equation5](https://latex.codecogs.com/svg.image?M\tfrac{(i)}{15}).
+
+``` c
+else if(nobytes < 120){
+	M->bytes[nobytes] = 0x80;
+    for (nobytes++; nobytes < 120; nobytes++) { 
+		M->bytes[nobytes] = 0x00;
+    }
+```
 
 #### Setting the initial hash value (Section 5.3.5)
 The initial hash value ![equation6](https://latex.codecogs.com/svg.image?H^{(0)}) must be initialised. The size and number of words depends on the message digest. For SHA512 the initial hash value consists of the following eight 64-bit words, in hex. These words were obtained by taking the first 64 bits of the fractional parts of the square roots of the first eight prime numbers.
@@ -226,7 +236,7 @@ H[7] = h + H[7];
 ### Solving Big-Endian
 Little and big endian are two ways of storing multibyte data-types ( int, float, etc). In little endian machines, the last byte of binary representation of the multibyte data-type is stored first. On the other hand, in big endian machines, first byte of binary representation of the multibyte data-type is stored first.
 
-Simple way of how I checked if my machine is big endian or little endian using Jupyter Notebook: 
+Simple way of how I checked if my machine is big endian or little endian using Jupyter Notebook: From running this piece of code it specified that my machine is little endian.
 
 ``` py
 from sys import byteorder
@@ -236,7 +246,7 @@ print(byteorder)
 ## Assignment Questions 
 <b>Why can't we reverse the SHA512 algorithm to retrieve the original message from a hash digest?</b><br>
 
-Hash algorithms such as the SHA-512 algorithm are most commonly used for security and for detecting if messages have been changed since the digests were generated. They provide encription using an algorithm and no key and are also known as "one-way hash functions" [A1](https://www.researchgate.net/profile/Imam-Riadi-2/publication/327392778_Analysis_of_Secure_Hash_Algorithm_SHA_512_for_Encryption_Process_on_Web_Based_Application/links/5b8cbe5e4585151fd1447946/Analysis-of-Secure-Hash-Algorithm-SHA-512-for-Encryption-Process-on-Web-Based-Application.pdf). There is no possible way to reverse the encription hence the reason they are called "hash" algorithms [7](https://www.sciencedirect.com/topics/computer-science/message-digest). They are designed specifically to take in an input, compute the hash function and output a hashed value as shown in <i> figure 1 </i>. This ensures that every bit of output is dependant upon every bit of the input. It prevents others from splitting the algorithm up and trying to reverse calculate an input from each of the output hash separately.  
+Hash algorithms such as the SHA-512 algorithm are most commonly used for security and for detecting if messages have been changed since the digests were generated. They provide encryption using an algorithm and no key and are also known as "one-way hash functions" [A1](https://www.researchgate.net/profile/Imam-Riadi-2/publication/327392778_Analysis_of_Secure_Hash_Algorithm_SHA_512_for_Encryption_Process_on_Web_Based_Application/links/5b8cbe5e4585151fd1447946/Analysis-of-Secure-Hash-Algorithm-SHA-512-for-Encryption-Process-on-Web-Based-Application.pdf). There is no possible way to reverse the encryption hence the reason they are called "hash" algorithms [7](https://www.sciencedirect.com/topics/computer-science/message-digest), with hash generally meaning "one way". They are designed specifically to take in an input, compute the hash function and output a hashed value as shown in <i> figure 1 </i>. This ensures that every bit of output is dependant upon every bit of the input. It prevents others from splitting the algorithm up and trying to reverse calculate an input from each of the output hash separately.  
 
 <p align="center">
   <img src="./img/diagram.png" width=600 height=250/>
@@ -245,9 +255,9 @@ Hash algorithms such as the SHA-512 algorithm are most commonly used for securit
 
 The SHA-512 algorithm is designed to make finding the corresponding input to an output extremely dificult. If ones goal is to find an input that generates a given hash, there should be no way to do it that's faster than brute force - trying every input in turn until one works.
 
-Consider a simple example function 'OR'. If you applied this to an input function of 1 and 0 the solution would be 1. But now having known the answer you cannot revert post solution due to data loss. Instead you are left with three differant possible answers for example (1,1), (0,1) or (1,0). Only brute force could possibly find the correct input variables.
+Consider a simple example function 'OR'. If you applied this to an input function of 1 and 0 the solution would be 1. But now having known the answer you cannot revert post solution due to data loss. Instead you are left with three differant possible answers for example (1,1), (0,1) or (1,0). Only brute force could possibly find the correct input variables. The SHA-512 algorithm follows the same idea. Although the SHA-512 is not reversable, it can be cracked using a brute-force method aswell. You can not produce the password from a hash, but you con create hashes of millions of passwords until you find one that matches. For this reason, the hash's strength isn't based so much on the key length of the hashing algorithm, but on the length of the password itself. And because passwords have such low entropy, are predictable, and are often too short, this usually is not a difficult but a task that would take days or even months to crack.
 
-But why is it important to not be able to reverse? Security?
+But why is it important for them to not be able to be reversed? The secure hash algorithms such as SHA512 are used in many things such as internet security, digital certificates and even blockchains. Since hashing algorithms play such a vital role in digital security and crytography it is vital that they can not be reversed for security reasons.
 
 <b>Can you design an algorithm that, given enough time, will find input messages that give each of the possible 512-bit strings?</b><br>
 
