@@ -7,10 +7,10 @@
 </h4>
 
 <p align="center">
-  <img src="./img/logo.jpeg" width=600 height=500/>
+  <img src="./img/logo.jpeg" width=600 height=400/>
 </p>
 
-## Project Details
+## Project Details\
 Heading  | Details
 -------- | -------------------------------------
 Project  | [Project Spec](https://github.com/ianmcloughlin/theory-algos-project)
@@ -22,7 +22,7 @@ Lecturer | Dr Ian McLoughlin
 
 ## Program Output
 <p align="center">
-  <img src="./img/output.PNG" width=600 heigh=400/>
+  <img src="./img/output.PNG" width=650 heigh=500/>
 </p>
 
 ## Contents
@@ -44,19 +44,19 @@ This repository contains the C code to compute the SHA512 algorithm based on an 
 ├── img # Folders contains images discussed in README.md
 │   ├──  # logo.jpeg
 │   └──  # diagram.png
-├── videos # Folder containing screencasts of how to set-up, deploy and run project
-│   ├── # Screencast 1
-|   └── # Screencast 2
+├── cmd-input # Folder containing getops command line inputted strings
+│   ├──  StringInput.txt # Command line strings are written to this for SHA-512 calculation
 ├── .gitignore # Text file listing files to ignore
 ├── README.md # Full overview of project
 ├── SHA512.c # SHA512 algorithm coded using C programming language
 ├── abc.txt # Input file containing a string of "abc"
+├── empty.txt # Blank file for testing
 ├── Makefile # Makefile of the program
 ├── tests.sh # Bash tests file to test if the algorithm if working correctly
 ```
 
 ## SHA512 Overview
-The SHA512 algorithm is part of a set of crytographic hash functions designed by the [United States National Security (NSA)](https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.180-4.pdf) and published in 2001 [4](https://en.wikipedia.org/wiki/SHA-2). Hashing algorithms are primarily used to provide integrity [7](https://www.sciencedirect.com/topics/computer-science/message-digest). There are numerous secure hash algorithms such as the SHA-1, SHA-224, SHA-256, SHA-384, SHA-512, SHA-512/224 and SHA-512/256. These are used for computation of condensed representation of electronic data. When a message of any length  less than ![equation1](https://latex.codecogs.com/gif.latex?2%5E%7B64%7D) bits (for SHA-1, SHA-224 and SHA-256) or less than ![equation2](https://latex.codecogs.com/gif.latex?2%5E%7B128%7D) bits (for SHA-384, SHA-512, SHA-512/224 and SHA-512/256) is input to a hash algorithm. The result is a specific output also known as a message digest which is essentially a compact representation of the binary data recieved as input [8](https://www.sciencedirect.com/topics/computer-science/hashing-algorithm). These digests range in length from 160 to 512 bits, depending on the algorithm.
+The SHA512 algorithm is part of a set of crytographic hash functions designed by the [United States National Security (NSA)](https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.180-4.pdf) and published in 2001 [4]. Hashing algorithms are primarily used to provide integrity [7]. There are numerous secure hash algorithms such as the SHA-1, SHA-224, SHA-256, SHA-384, SHA-512, SHA-512/224 and SHA-512/256. These are used for computation of condensed representation of electronic data. When a message of any length  less than ![equation1](https://latex.codecogs.com/gif.latex?2%5E%7B64%7D) bits (for SHA-1, SHA-224 and SHA-256) or less than ![equation2](https://latex.codecogs.com/gif.latex?2%5E%7B128%7D) bits (for SHA-384, SHA-512, SHA-512/224 and SHA-512/256) is input to a hash algorithm. The result is a specific output also known as a message digest which is essentially a compact representation of the binary data recieved as input [8]. These digests range in length from 160 to 512 bits, depending on the algorithm.
 
 The hash algorithms have secure in their name because, for a given algorithm, it is computationally infeasible to find a message that corresponds to a given message digest or to find two different messages that produce the same message digest. Any change at all to a message will give a different result.
 
@@ -78,7 +78,8 @@ Nicer ZSH shell (optional): ``` sh -c "$(curl -fsSL https://raw.github.com/ohmyz
 2. Navigate to the <b> \program\ </b> directory: ```cd theory-algos-project```<br>
 3. Compile the program: ```make```<br>
 4. Execute the program: ```./SHA512 abc.txt```<br>
-5. Run tests: ```./tests.sh```
+5. Execute options: ```./SHA512``` <br>
+6. Run tests: ```make test``` <br>
 
 ## Command Line Arguments
 The C programming language allows for the use of command-line arguments. Command-line arguments allow data to be provided to the program at runtime. Arguments can be passed to the main method if the main method is declared as follows.
@@ -91,10 +92,10 @@ int main(int argc, char *argv[]){
 The program in this case can take two arguments, an integer called ```argc``` and a character array called ```*argv[]```
 
 - ```argc```
-  - Conventionally, argc, which stands for argument count, retrieves the amount of arguments the program has just taken. For example, if the following was ran ./SHA512 one two three, argc would be equal to four, since it includes the actual program declaration [9](http://117.3.71.125:8080/dspace/bitstream/DHKTDN/6554/1/The%20C%20Programming%20Language4603.pdf).
+  - Conventionally, argc, which stands for argument count, retrieves the amount of arguments the program has just taken. For example, if the following was ran ./SHA512 one two three, argc would be equal to four, since it includes the actual program declaration [9].
 
 - ```*argv[]```
-  - Meaning 'argument vector', argv[] is an array containing the command line arguments. Looking at the previous example, if the input was ./SHA512 one two three, argv[] would be of size four, the first index being SHA512, the second being one and so on [9](http://117.3.71.125:8080/dspace/bitstream/DHKTDN/6554/1/The%20C%20Programming%20Language4603.pdf).
+  - Meaning 'argument vector', argv[] is an array containing the command line arguments. Looking at the previous example, if the input was ./SHA512 one two three, argv[] would be of size four, the first index being SHA512, the second being one and so on [9].
 
 ### Functional Command Line Arguments
 The table below contains a list of valid command-line arguments specific to the program, an example of how to input them and also their output. 
@@ -248,7 +249,7 @@ print(byteorder)
 ## Assignment Questions 
 <b>Why can't we reverse the SHA512 algorithm to retrieve the original message from a hash digest?</b><br>
 
-Hash algorithms such as the SHA-512 algorithm are most commonly used for security and for detecting if messages have been changed since the digests were generated. They provide encryption using an algorithm and no key and are also known as "one-way hash functions" [A1](https://www.researchgate.net/profile/Imam-Riadi-2/publication/327392778_Analysis_of_Secure_Hash_Algorithm_SHA_512_for_Encryption_Process_on_Web_Based_Application/links/5b8cbe5e4585151fd1447946/Analysis-of-Secure-Hash-Algorithm-SHA-512-for-Encryption-Process-on-Web-Based-Application.pdf). There is no possible way to reverse the encryption hence the reason they are called "hash" algorithms [7](https://www.sciencedirect.com/topics/computer-science/message-digest), with hash generally meaning "one way". They are designed specifically to take in an input, compute the hash function and output a hashed value as shown in <i> figure 1 </i>. This ensures that every bit of output is dependant upon every bit of the input. It prevents others from splitting the algorithm up and trying to reverse calculate an input from each of the output hash separately.  
+Hash algorithms such as the SHA-512 algorithm are most commonly used for security and for detecting if messages have been changed since the digests were generated. They provide encryption using an algorithm and no key and are also known as "one-way hash functions" [A1]. There is no possible way to reverse the encryption hence the reason they are called "hash" algorithms [7], with hash generally meaning "one way". They are designed specifically to take in an input, compute the hash function and output a hashed value as shown in <i> figure 1 </i>. This ensures that every bit of output is dependant upon every bit of the input. It prevents others from splitting the algorithm up and trying to reverse calculate an input from each of the output hash separately.  
 
 <p align="center">
   <img src="./img/diagram.png" width=600 height=250/>
@@ -259,15 +260,20 @@ Hash algorithms such as the SHA-512 algorithm are most commonly used for securit
 
 It is unclear whether one-way functions can actually exist. Right now, there are many functions that no one knows how to invert; but this does not mean that they are impossible to invert, in a mathematical sense [11]. The SHA-512 algorithm is designed to make finding the corresponding input to an output extremely dificult. If ones goal is to find an input that generates a given hash, there should be no way to do it that's faster than brute force - trying every input in turn until one works. 
 
-There are two main reasons why the SHA-512 can not be reversed, one being hash functions essentially discard information in a very deterministic way – using the modulo operator. For a quick review, modulus is essentially the same as saying “the remainder of” (applying to division). An example of this would be 16 <i>mod</i> 5 = 1. What’s happening here is that by dividing 16 by 5, the result of the operation is whatever is left over – or the remainder. The modulo operation is not reversible [12](https://privacycanada.net/hash-functions/why-are-hashes-irreversible/). There are infinite possible number combinations that you could use to get that original input value.
+There are two main reasons why the SHA-512 can not be reversed, one being hash functions essentially discard information in a very deterministic way – using the modulo operator. For a quick review, modulus is essentially the same as saying “the remainder of” (applying to division). An example of this would be 16 <i>mod</i> 5 = 1. What’s happening here is that by dividing 16 by 5, the result of the operation is whatever is left over – or the remainder. The modulo operation is not reversible [12]. There are infinite possible number combinations that you could use to get that original input value.
 
-Another reason is because data is lost after computation. Consider a simple example function 'OR'. If you applied this to an input function of 1 and 0 the solution would be 1. But now having known the answer you cannot revert post solution due to data loss. Instead you are left with three differant possible answers for example (1,1), (0,1) or (1,0). Only brute force could possibly find the correct input variables. The SHA-512 algorithm follows the same idea. Although the SHA-512 is not reversable, it can be cracked using a brute-force method aswell. You can not produce the password from a hash, but you can create hashes of millions of passwords until you find one that matches. For this reason, the hash's strength isn't based so much on the key length of the hashing algorithm, but on the length of the password itself. And because passwords have such low entropy, are predictable, and are often too short, this usually is not a difficult task but a task that would take months or even years to crack [8](https://www.sciencedirect.com/topics/computer-science/hashing-algorithm). There would be approximately ![equation11](https://latex.codecogs.com/svg.image?2^{512}) posossible input values.
+Another reason is because data is lost after computation. Consider a simple example function 'OR'. If you applied this to an input function of 1 and 0 the solution would be 1. But now having known the answer you cannot revert post solution due to data loss. Instead you are left with three differant possible answers for example (1,1), (0,1) or (1,0). Only brute force could possibly find the correct input variables. The SHA-512 algorithm follows the same idea. Although the SHA-512 is not reversable, it can be cracked using a brute-force method aswell. You can not produce the password from a hash, but you can create hashes of millions of passwords until you find one that matches. For this reason, the hash's strength isn't based so much on the key length of the hashing algorithm, but on the length of the password itself. And because passwords have such low entropy, are predictable, and are often too short, this usually is not a difficult task but a task that would take months or even years to crack [8]. There would be approximately ![equation11](https://latex.codecogs.com/svg.image?2^{512}) posossible input values.
 
-But why is it important for them to not be able to be reversed? The secure hash algorithms such as SHA512 are used in many things such as internet security, digital certificates and even blockchains [10](https://medium.com/@zaid960928/cryptography-explaining-sha-512-ad896365a0c1#:~:text=SHA%2D512%20is%20a%20hashing,digital%20certificates%20and%20even%20blockchains.). Since hashing algorithms play such a vital role in digital security and crytography it is vital that they can not be reversed for security reasons.
+But why is it important for them to not be able to be reversed? The secure hash algorithms such as SHA512 are used in many things such as internet security, digital certificates and even blockchains [10]. Since hashing algorithms play such a vital role in digital security and crytography it is vital that they can not be reversed for security reasons.
 
 <b>Can you design an algorithm that, given enough time, will find input messages that give each of the possible 512-bit strings?</b><br>
 
 <b>How difficult is it to find a hash digest beginning with at least twelve zeros?</b><br>
+Bitcoin mining is designed to find a string <i>s</i> such that the sha512 has <i>n</i> leading zeros, where <i>n</i> determines the mining difficulty [13]. Difficulty is a value used to show how hard is it to find a hash that will be lower than a specific target defined by system, for example a hash with twelve leading zeros. The Bitcoin network has a global block difficulty. Valid blocks must have a hash below this target. Mining pools also have a pool-specific share difficulty setting a lower limit for shares. In Bitcoin network there is a global difficulty set for all blocks that is defined below.
+
+```difficulty = difficulty_1_target / current_target```
+
+Today, Bitcoin miners are looking for an output with a certain number of zeros. Miners have to find a hash which starts with nineteen zeroes. To get this number requires many, many attempts. Once the hash is found, the block is closed and it is added to the blockchain. After successfully mining a block, miners are rewarded with newly-created Bitcoins and transaction fees [14].
 
 ## Referances
 [1] GitHub, Markdown Cheetsheet, <br>
@@ -294,6 +300,10 @@ https://medium.com/@zaid960928/cryptography-explaining-sha-512-ad896365a0c1#:~:t
 https://security.stackexchange.com/questions/11717/why-are-hash-functions-one-way-if-i-know-the-algorithm-why-cant-i-calculate-t <br>
 [12] Private Canada, Why Are Hashes Irreversible>,
 https://privacycanada.net/hash-functions/why-are-hashes-irreversible/
+[13] StackExchange, Mining Difficulty and Leading Zeros, <br>
+https://bitcoin.stackexchange.com/questions/85896/mining-difficulty-and-leading-zeros <br>
+[14] Luno, Bitcoin’s hash rate is hitting record highs, but does it even matter?, <br>
+https://www.luno.com/blog/en/post/bitcoins-hash-rate-is-hitting-record-highs-but-does-it-even-matter <br>
 
 ## Google Scholar Referances
 [A1] Sumagita, M., Riadi, I., Sh, J.P.D.S. and Warungboto, U., 2018. Analysis of secure hash algorithm (SHA) 512 for encryption process on web based application. International Journal of Cyber-Security and Digital Forensics (IJCSDF), 7(4), pp.373-381.

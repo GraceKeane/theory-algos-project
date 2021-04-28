@@ -207,7 +207,7 @@ void cmd_line_arguments(int option){
             printf("The SHA-512 hashing algorithm is a one way function that accepts a message of any length, then returns the appropriate SHA512 message digest.");
             printf("The algorithm itself consists of creating defined functions, declaring constants, preprocessing and hash computation.\n\n");
             
-            printf("\n----------------------- Algorithm Diagram -------------------------- ");
+            printf("\n+---------------------- Algorithm Diagram -------------------------+\n\n");
             printf("            +                                                        \n");
             printf("            |  64 bits  (constants/ functions)                       \n");
             printf("            |                                                        \n");
