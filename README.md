@@ -7,7 +7,7 @@
 </h4>
 
 <p align="center">
-  <img src="./img/logo.jpeg" width=600 height=250/>
+  <img src="./img/logo.jpeg" width=600 height=500/>
 </p>
 
 ## Project Details

@@ -23,19 +23,14 @@ const int _i = 1;
 */
 #define ROTL(_x,_n) ((_x << _n) | (_x >> ((sizeof(_x)*8) - _n)))
 #define ROTR(_x,_n) ((_x >> _n) | (_x << ((sizeof(_x)*8) - _n)))
-// Ch function
 #define CH(_x,_y,_z) ((_x & _y) ^ (~_x & _z))
-// Maj function 
 #define MAJ(_x,_y,_z) ((_x & _y) ^ (_x & _z) ^ (_y & _z))
-// Shift right
 #define SHR(_x,_n) (_x >> _n)
-
 #define SIG0(_x) (ROTR(_x,28) ^ ROTR(_x,34) ^ ROTR(_x,39))
 #define SIG1(_x) (ROTR(_x,14) ^ ROTR(_x,18) ^ ROTR(_x,41))
 #define sig0(_x) (ROTR(_x,1) ^ ROTR(_x,8) ^ SHR(_x,7))
 #define sig1(_x) (ROTR(_x,19) ^ ROTR(_x,61) ^ SHR(_x,6))
 
-// Types
 // SHA512 works on blocks of 1024 bits
 union Block {
     BYTE bytes[128]; 
@@ -75,14 +70,10 @@ const WORD K[] = {
 };
 
 /*
-    Section 6.4 of the Secure Hash Standard
-    Carrying out the preprocessing (3 steps)
-*/
-
-/*
+    Section 6.4 of the Secure Hash Standard.
+    Carrying out the preprocessing (3 steps).
     Get next block & Return 1 if it created a new block from original
     message or padding.
-
     Returns 0 if all padded message has already been consumed.
 */
 int next_block(FILE *f, union Block *M, enum Status *S, uint64_t *nobits){
@@ -100,12 +91,10 @@ int next_block(FILE *f, union Block *M, enum Status *S, uint64_t *nobits){
         *nobits = *nobits + (8 * nobytes); 
 
         if(nobytes == 128){
-            // This happens when we can read 64 bytes from f
-            // Return nothing
-            // step 3
+            // Can read 64 bytes from f -> return 0
         } else if(nobytes < 120){
-            // Append a 1 bit 
-            // This executes when program has enough room for padding
+            // Append 1 bit 
+            // Has enough room for padding
             M->bytes[nobytes] = 0x80;
             // Append enough 0 bits, leaving 120 at the end
             for (nobytes++; nobytes < 120; nobytes++) { 
@@ -115,8 +104,7 @@ int next_block(FILE *f, union Block *M, enum Status *S, uint64_t *nobits){
 
             // Append length of original input & checking endiness
             M->sixf[15] = (islilend() ? bswap_64(*nobits) : *nobits);
-            // Last block
-            // Set status to end
+            // Last block -> Set status to end
             *S = END;
         } else {
             /*
@@ -148,18 +136,13 @@ int next_block(FILE *f, union Block *M, enum Status *S, uint64_t *nobits){
         if (islilend())
             for (int i = 0; i < 16; i++) 
                 M->words[i] = bswap_64(M->words[i]);
-
-        return 1;
-    
+    return 1;
 }
 
 /*
-    Step 1, 2, 3, 4 from Sec 6.4.2 - Message Schedule
-    Function to calculate the next hash values.
-    (H_0 -> H_1 -> H_2 -> ... -> H_N)
-    Hash values calculated with corresponding
-    message. e.g. H_1 uses M_2 to calculate H_2.
-    Message block is made up of 1024 bits.
+    Step 1, 2, 3, 4 from Sec 6.4.2 - Message Schedule function to calculate the next hash values.
+    (H_0 -> H_1 -> H_2 -> ... -> H_N). Hash values calculated with corresponding
+    message. e.g. H_1 uses M_2 to calculate H_2. Message block is made up of 1024 bits.
 */
 int next_hash(union Block *M, WORD H[]){
     WORD W[80];
@@ -168,13 +151,13 @@ int next_hash(union Block *M, WORD H[]){
     // Temporary variables
     WORD a, b, c, d, e, f, g, h, T1, T2;
 
-    // Step 1
+    // Step 1 - prepare the message schedule
     for(t = 0; t < 16; t++)
         W[t] = M->words[t];
     for (t = 16; t < 80; t++)
         W[t] = sig1(W[t-2]) + W[t-7] + sig0(W[t-15]) + W[t-16];
 
-    // Step 2
+    // Step 2 - Initialize the eight working variables
     a = H[0];
     b = H[1];
     c = H[2];
@@ -184,7 +167,7 @@ int next_hash(union Block *M, WORD H[]){
     g = H[6];
     h = H[7];
 
-    // Step 3
+    // Step 3 - Create a for loop to loop initialized from 0 - 79 
     for(t = 0; t < 80; t++) {
         T1 = h + SIG1(e) + CH(e, f, g) + K[t] + W[t];
         T2 = SIG0(a) + MAJ(a, b, c);
@@ -198,9 +181,7 @@ int next_hash(union Block *M, WORD H[]){
         a = T1 + T2;
     }
 
-    /* Step 4 - Calculate next hash from currect message block
-       and current hash value.
-    */
+    // Step 4 - Calculate next hash from currect message block and current hash value.
     H[0] = a + H[0];
     H[1] = b + H[1];
     H[2] = c + H[2];
@@ -213,14 +194,15 @@ int next_hash(union Block *M, WORD H[]){
     return 0;
 }
 
+// Command Line Argument Outputs 
 void cmd_line_arguments(int option){
     switch (option){
-        case 0:
+        case 0: // No command line arguments were entered
             printf("\n---No command line argument specified --help will list all valid command line arguments---\n");
             printf("\nInput - 1: Perform SHA-512 on an inputted string \n");
             printf("\nInput - 2: Perform SHA-512 on a specified file \n");
             break;
-        case 1:
+        case 1: // The argument --explain was entered
             printf("\n\nThe SHA-512 algorithm is part of a set of crytographic hash functions designed by the United States National Security (NSA).");
             printf("The SHA-512 hashing algorithm is a one way function that accepts a message of any length, then returns the appropriate SHA512 message digest.");
             printf("The algorithm itself consists of creating defined functions, declaring constants, preprocessing and hash computation.\n\n");
@@ -254,23 +236,20 @@ void cmd_line_arguments(int option){
             printf("The output from SHA-512 is a 512-bit message digest value.\n");
             printf("For more information visit: https://github.com/GraceKeane/theory-algos-project\n\n");
             break;
-        case 2:
+        case 2: // The command --help was entered
             printf("\n--------------- Valid Command Line Argument Inputs ---------------- ");
             printf("\n --help            | Displays helpful information for running the program.  ");
             printf("\n --explain         | Brief high level overview of SHA-512, including a diagram.");
             printf("\n --hashstring [ ]  | Allows user to enter any string to be SHA-512 calculated.");
             printf("\n --hashfile [ .txt]| Allows user to enter any file to be SHA-512 calculated.\n\n");
             break;
+        default:
+            break;
     }
 }
 
-/*
-    Function that actuallt does the SHA512 computation
-*/
+// Function that executes the SHA512 computation
 int sha512(FILE *f, WORD H[]){
-    /*
-     Function that performs the SHA512 algo on message file
-    */
     // Message block
     union Block M;
     // 64 bit integer to keep track of the number of bits
@@ -283,30 +262,28 @@ int sha512(FILE *f, WORD H[]){
         // Passed address of next message block and hash val
         next_hash(&M, H);
     }
-    // return type is int, therefore return 0
+    // return type is int, return 0
     return 0;
 }
 
 /*
-    Sets the initial hash value, opens file for reading 
-    and sends a message to sha512 to calculate the hash 
-    value by using the initial hash value and file 
-    pointer.
+    Sets the initial hash value, opens file for reading and sends a message to sha512 to calculate the hash 
+    value by using the initial hash value and file pointer.
 
-    Prints out the H array with final hash value. When
-    the function is completed the file is then closed.
+    Prints out the H array with final hash value. When the function is completed the file is then closed.
 */
 int main(int argc, char *argv[]){  
 
-    /* Input vars */
+    // Input vars 
     int option;
+    // Long getopt options
     int c;
-    /* Declaration of file/string inputs */
+    // Declaration of file/string inputs 
     char fileName[100];
     char inputString[50];                      
     
-    // Initial hash value (described in preprocessing section)
-    // H is a local variable
+    // Initial hash value (described in Section 5.3.5)
+    // Assigning H to be a local variable
     WORD H[] = {
         0x6a09e667f3bcc908, 0xbb67ae8584caa73b, 0x3c6ef372fe94f82b, 0xa54ff53a5f1d36f1,
         0x510e527fade682d1, 0x9b05688c2b3e6c1f, 0x1f83d9abfb41bd6b, 0x5be0cd19137e2179
@@ -317,15 +294,16 @@ int main(int argc, char *argv[]){
     // Open file from command line for reading
     f = fopen(argv[1], "r");
 
-    // Error handling
+    // User ran SH512 without any arguments
     if (argv[1] == NULL){
+        // Provides input options
         cmd_line_arguments(0);
-        scanf("%d", &option);
+            scanf("%d", &option);   
     
+        // User wants to input a string
         if(option == 1){
             printf("Enter a string: ");
-            scanf("%s", inputString);
-
+                scanf("%s", inputString);
             f = fopen("cmd-input/StringInput.txt", "w");
             fprintf(f, "%s", inputString);
             fclose(f);
@@ -339,13 +317,9 @@ int main(int argc, char *argv[]){
                 printf("%016" PF, H[i]);
                 printf("\n");
                 fclose(f);
-    
-        
-
         } else if(option == 2){
-             printf("Enter a file name: ");
-
-            scanf("%s", fileName);    
+            printf("Enter a file name: ");
+                scanf("%s", fileName);    
             f = fopen(fileName, "rb");
 
             if (!f){
@@ -362,14 +336,10 @@ int main(int argc, char *argv[]){
                     fclose(f);
             }
 
-        }
-        
-        else {
+        } else {
                 printf("\nInvalid Input\nExiting ...\n");   
-            
+        }
     }
-    }
-
     else {
         // Adapted from - https://www.gnu.org/software/libc/manual/html_node/Getopt-Long-Option-Example.html
         static struct option long_options[] = {
@@ -380,66 +350,66 @@ int main(int argc, char *argv[]){
             {0           , 0                , 0,  0 }
         };
 
-         /* getopt_long stores the option index here */
+        // getopt_long stores the option index here 
         int option_index = 0;
 
         c = getopt_long (argc, argv, "h:t:e:f:s", long_options, &option_index);
         switch (c) {
             case 'e':
-                /* Display some helpful information to the user */
+                // Display explanations of the algorithm 
                 cmd_line_arguments(1);
                 break;
             case 'h':
-                /* Display some helpful information to the user */
+                //  Display some helpful information to the user 
                 cmd_line_arguments(2);
                 break;
-            case 's':
+            case 's': // Allows user to enter a string to be calculated
+                // Open file
                 f = fopen("cmd-input/StringInput.txt", "w");
+                // Write user input to a file
                 fprintf(f, "%s", optarg);
                 fclose(f);
 
+                // Open the file to read
                 f = fopen("cmd-input/StringInput.txt", "rb");
                 printf("\nProcessing String ...\nSHA-512: ");
                 sha512(f, H);
 
+                // Perform SHA-512 calculation
                 for (int i = 0; i < 8; i++) 
-                printf("%016" PF, H[i]);
-                printf("\n");
-                
+                    printf("%016" PF, H[i]);
+                    printf("\n");
                 fclose(f);
                 break;
-            case 'f':
+            case 'f': // Allow user to choose file to be calculated
+                // Open file to be hashed
                 f = fopen(optarg, "rb");
 
+                // If invalid file input
                 if(!f){
                     printf("\nError: couldn't open file %s.\n", optarg);
                     return 1;
                 } 
-
+                // Otherwise perform SHA-512 calculation on file
                 else {
                     printf("\nProcessing file ...\nSHA-512: ");
                     sha512(f, H);
 
                     for (int i = 0; i < 8; i++) 
-                    printf("%016" PF, H[i]);
-                    printf("\n");
-                
+                        printf("%016" PF, H[i]);
+                        printf("\n");
                     fclose(f);
                     break;
                 }
+            }
         }
-    }
-    
-    
-        sha512(f, H);
-
-        // Print the SHA512 hash of f
-        for (int i = 0; i < 8; i++) 
-            printf("%016" PF, H[i]);
+    sha512(f, H);
+    // Print the SHA512 hash of f
+    for (int i = 0; i < 8; i++) 
+        printf("%016" PF, H[i]);
         printf("\n");
         
-        // Close this file
-        fclose(f);
-        return 0;
-    }
-      
+    // Close this file
+    fclose(f);
+    return 0;
+}
