@@ -22,7 +22,7 @@ Lecturer | Dr Ian McLoughlin
 
 ## Program Output
 <p align="center">
-  <img src="./img/output.PNG" width=800 height=440/>
+  <img src="./img/output.PNG" width=600 heigh7t=350/>
 </p>
 
 ## Contents
@@ -289,7 +289,7 @@ http://117.3.71.125:8080/dspace/bitstream/DHKTDN/6554/1/The%20C%20Programming%20
 [10] Medium, Cryptography: Explaining SHA-512, <br>
 https://medium.com/@zaid960928/cryptography-explaining-sha-512-ad896365a0c1#:~:text=SHA%2D512%20is%20a%20hashing <br>
 [11] StackExchange, Why are hash functions one way, <br>
-https://security.stackexchange.com/questions/11717/why-are-hash-functions-one-way-if-i-know-the-algorithm-why-cant-i-calculate-t
+https://security.stackexchange.com/questions/11717/why-are-hash-functions-one-way-if-i-know-the-algorithm-why-cant-i-calculate-t <br>
 [12] Private Canada, Why Are Hashes Irreversible>,
 https://privacycanada.net/hash-functions/why-are-hashes-irreversible/
 

@@ -216,14 +216,15 @@ int next_hash(union Block *M, WORD H[]){
 void cmd_line_arguments(int option){
     switch (option){
         case 0:
-            printf("\n---No command line argument specified---\n");
-            printf("\nInput - 1: SHA-512 Architecture Diagram & Explanation\n");
+            printf("\n---No command line argument specified --help will list all valid command line arguments---\n");
+            printf("\nInput - 1: Perform SHA-512 on an inputted string \n");
             break;
         case 1:
-            printf("The SHA-512 algorithm is part of a set of crytographic hash functions designed by the United States National Security (NSA).");
+            printf("\n\nThe SHA-512 algorithm is part of a set of crytographic hash functions designed by the United States National Security (NSA).");
             printf("The SHA-512 hashing algorithm is a one way function that accepts a message of any length, then returns the appropriate SHA512 message digest.");
             printf("The algorithm itself consists of creating defined functions, declaring constants, preprocessing and hash computation.\n\n");
-
+            
+            printf("\n----------------------- Algorithm Diagram -------------------------- ");
             printf("            +                                                        \n");
             printf("            |  64 bits  (constants/ functions)                       \n");
             printf("            |                                                        \n");
@@ -251,6 +252,12 @@ void cmd_line_arguments(int option){
             printf("\nThe SHA-512 hashing algorithm processes data in 1024-bit blocks,\n");
             printf("The output from SHA-512 is a 512-bit message digest value.\n");
             printf("For more information visit: https://github.com/GraceKeane/theory-algos-project\n\n");
+            break;
+        case 2:
+            printf("\n--------------- Valid Command Line Argument Inputs ---------------- ");
+            printf("\n --help    | Displays helpful information for running the program.  ");
+            printf("\n --test    | Runs the test suite to ensure the SHA-512 output is valid. ");
+            printf("\n --explain | Brief high level overview of SHA-512, including a diagram.\n\n");
             break;
     }
 }
@@ -312,13 +319,31 @@ int main(int argc, char *argv[]){
     if (argv[1] == NULL){
         cmd_line_arguments(0);
         scanf("%d", &option);
+    
+    if(option == 1){
+            printf("Enter a string: ");
+            scanf("%s", inputString);
 
-        if(option == 1){
-            cmd_line_arguments(1);
-        }
+            f = fopen("cmd-input/StringInput.txt", "w");
+            fprintf(f, "%s", inputString);
+            fclose(f);
+
+            f = fopen("cmd-input/StringInput.txt", "rb");
+            printf("Calculating the SHA-512 of inputted string ...");
+            printf("\n\nSHA-512: ");
+            sha512(f, H);
+
+            for (int i = 0; i < 8; i++) 
+                printf("%016" PF, H[i]);
+            printf("\n");
+            fclose(f);
+        } else {
+                printf("\nInvalid Input\nExiting ...\n");   
+            }
     }
 
     else {
+        // Adapted from - https://www.gnu.org/software/libc/manual/html_node/Getopt-Long-Option-Example.html
         static struct option long_options[] = {
             {"help"      , no_argument      , 0, 'h'},
             {"test"      , no_argument      , 0, 't'},
@@ -333,6 +358,10 @@ int main(int argc, char *argv[]){
 
         c = getopt_long (argc, argv, "h:t:e:f:s", long_options, &option_index);
         switch (c) {
+            case 'e':
+                /* Display some helpful information to the user */
+                cmd_line_arguments(1);
+                break;
             case 'h':
                 /* Display some helpful information to the user */
                 cmd_line_arguments(2);
@@ -351,5 +380,5 @@ int main(int argc, char *argv[]){
         // Close this file
         fclose(f);
         return 0;
+    }
       
-}
