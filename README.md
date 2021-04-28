@@ -22,7 +22,7 @@ Lecturer | Dr Ian McLoughlin
 
 ## Program Output
 <p align="center">
-  <img src="./img/output.PNG" width=600 heigh7t=350/>
+  <img src="./img/output.PNG" width=600 heigh=400/>
 </p>
 
 ## Contents
@@ -103,6 +103,8 @@ The table below contains a list of valid command-line arguments specific to the 
 | :---:           |     :---:      |     :---: |
 | --help          | ```./SHA512 --help``` | Will detail additional arguments and examples on how to execute them|
 | --explain       | ```./SHA512 --explain``` | Displays a brief explanation of SHA512 including an ASCII high-level diagram|
+| --hashstring    | ```./SHA512 --hashstring abcde``` | Allows the user to input any string and calculates the SHA512 of that input|
+| --hashfile      | ```./SHA512 --hashfile abc.txt``` | Allows the user to input a file and calculates the SHA512 of that input|
 
 ## Project Implementation
 ### Creating the SHA512 functions (Section 4.1.3)

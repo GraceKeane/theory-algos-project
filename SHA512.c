@@ -218,6 +218,7 @@ void cmd_line_arguments(int option){
         case 0:
             printf("\n---No command line argument specified --help will list all valid command line arguments---\n");
             printf("\nInput - 1: Perform SHA-512 on an inputted string \n");
+            printf("\nInput - 2: Perform SHA-512 on a specified file \n");
             break;
         case 1:
             printf("\n\nThe SHA-512 algorithm is part of a set of crytographic hash functions designed by the United States National Security (NSA).");
@@ -255,9 +256,10 @@ void cmd_line_arguments(int option){
             break;
         case 2:
             printf("\n--------------- Valid Command Line Argument Inputs ---------------- ");
-            printf("\n --help    | Displays helpful information for running the program.  ");
-            printf("\n --test    | Runs the test suite to ensure the SHA-512 output is valid. ");
-            printf("\n --explain | Brief high level overview of SHA-512, including a diagram.\n\n");
+            printf("\n --help            | Displays helpful information for running the program.  ");
+            printf("\n --explain         | Brief high level overview of SHA-512, including a diagram.");
+            printf("\n --hashstring [ ]  | Allows user to enter any string to be SHA-512 calculated.");
+            printf("\n --hashfile [ .txt]| Allows user to enter any file to be SHA-512 calculated.\n\n");
             break;
     }
 }
@@ -320,7 +322,7 @@ int main(int argc, char *argv[]){
         cmd_line_arguments(0);
         scanf("%d", &option);
     
-    if(option == 1){
+        if(option == 1){
             printf("Enter a string: ");
             scanf("%s", inputString);
 
@@ -335,18 +337,43 @@ int main(int argc, char *argv[]){
 
             for (int i = 0; i < 8; i++) 
                 printf("%016" PF, H[i]);
-            printf("\n");
-            fclose(f);
-        } else {
-                printf("\nInvalid Input\nExiting ...\n");   
+                printf("\n");
+                fclose(f);
+    
+        
+
+        } else if(option == 2){
+             printf("Enter a file name: ");
+
+            scanf("%s", fileName);    
+            f = fopen(fileName, "rb");
+
+            if (!f){
+                printf("Error: couldn't open file %s.\n", argv[1]);
+                return 1;
+            } else {
+                printf("Calculating SHA-512 of file contents...");
+                printf("\n\nSHA-512: ");
+                sha512(f, H);
+
+                for (int i = 0; i < 8; i++) 
+                    printf("%016" PF, H[i]);
+                    printf("\n");
+                    fclose(f);
             }
+
+        }
+        
+        else {
+                printf("\nInvalid Input\nExiting ...\n");   
+            
+    }
     }
 
     else {
         // Adapted from - https://www.gnu.org/software/libc/manual/html_node/Getopt-Long-Option-Example.html
         static struct option long_options[] = {
             {"help"      , no_argument      , 0, 'h'},
-            {"test"      , no_argument      , 0, 't'},
             {"explain"   , no_argument      , 0, 'e'},
             {"hashfile"  , required_argument, 0, 'f'},
             {"hashstring", required_argument, 0, 's'},
@@ -366,6 +393,40 @@ int main(int argc, char *argv[]){
                 /* Display some helpful information to the user */
                 cmd_line_arguments(2);
                 break;
+            case 's':
+                f = fopen("cmd-input/StringInput.txt", "w");
+                fprintf(f, "%s", optarg);
+                fclose(f);
+
+                f = fopen("cmd-input/StringInput.txt", "rb");
+                printf("\nProcessing String ...\nSHA-512: ");
+                sha512(f, H);
+
+                for (int i = 0; i < 8; i++) 
+                printf("%016" PF, H[i]);
+                printf("\n");
+                
+                fclose(f);
+                break;
+            case 'f':
+                f = fopen(optarg, "rb");
+
+                if(!f){
+                    printf("\nError: couldn't open file %s.\n", optarg);
+                    return 1;
+                } 
+
+                else {
+                    printf("\nProcessing file ...\nSHA-512: ");
+                    sha512(f, H);
+
+                    for (int i = 0; i < 8; i++) 
+                    printf("%016" PF, H[i]);
+                    printf("\n");
+                
+                    fclose(f);
+                    break;
+                }
         }
     }
     
