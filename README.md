@@ -20,6 +20,11 @@ Author   | Grace Keane
 ID       | G00359990
 Lecturer | Dr Ian McLoughlin
 
+## Program Output
+<p align="center">
+  <img src="./img/output.PNG" width=800 height=440/>
+</p>
+
 ## Contents
 - [Repository Description](#repository-description)
 - [SHA512 Overview](#sha512-overview)
@@ -34,8 +39,6 @@ Lecturer | Dr Ian McLoughlin
 
 ## Repository Description
 This repository contains the C code to compute the SHA512 algorithm based on an input. The result of the program is a SHA512 message digest. This program also incorporates error handling, a make file, command line arguments and testing.
-
-- Final image of project output will go here
 
 ```bash
 ├── img # Folders contains images discussed in README.md
@@ -77,10 +80,7 @@ Nicer ZSH shell (optional): ``` sh -c "$(curl -fsSL https://raw.github.com/ohmyz
 4. Execute the program: ```./SHA512 abc.txt```<br>
 5. Run tests: ```./tests.sh```
 
-- Add screencasts to explain how to run & code snippets
-
 ## Command Line Arguments
-
 The C programming language allows for the use of command-line arguments. Command-line arguments allow data to be provided to the program at runtime. Arguments can be passed to the main method if the main method is declared as follows.
 ``` c
 int main(int argc, char *argv[]){  
@@ -252,11 +252,12 @@ Hash algorithms such as the SHA-512 algorithm are most commonly used for securit
   <img src="./img/diagram.png" width=600 height=250/>
 </p>
 <i><b>Figure 1, SHA algorithm diagram</b></i>
-<br>
+<br></br>
+
 
 It is unclear whether one-way functions can actually exist. Right now, there are many functions that no one knows how to invert; but this does not mean that they are impossible to invert, in a mathematical sense [11]. The SHA-512 algorithm is designed to make finding the corresponding input to an output extremely dificult. If ones goal is to find an input that generates a given hash, there should be no way to do it that's faster than brute force - trying every input in turn until one works. 
 
-There are two main reasons why the SHA-512 can not be reversed, one being hash functions essentially discard information in a very deterministic way – using the modulo operator. For a quick review, modulus is essentially the same as saying “the remainder of” (applying to division). An example of this would be 16 <i>mod</i> 5 = 1. What’s happening here is that by dividing 16 by 5, the result of the operation is whatever is left over – or the remainder. The modulo operation is not reversible. There are infinite possible number combinations that you could use to get that original input value.
+There are two main reasons why the SHA-512 can not be reversed, one being hash functions essentially discard information in a very deterministic way – using the modulo operator. For a quick review, modulus is essentially the same as saying “the remainder of” (applying to division). An example of this would be 16 <i>mod</i> 5 = 1. What’s happening here is that by dividing 16 by 5, the result of the operation is whatever is left over – or the remainder. The modulo operation is not reversible [12](https://privacycanada.net/hash-functions/why-are-hashes-irreversible/). There are infinite possible number combinations that you could use to get that original input value.
 
 Another reason is because data is lost after computation. Consider a simple example function 'OR'. If you applied this to an input function of 1 and 0 the solution would be 1. But now having known the answer you cannot revert post solution due to data loss. Instead you are left with three differant possible answers for example (1,1), (0,1) or (1,0). Only brute force could possibly find the correct input variables. The SHA-512 algorithm follows the same idea. Although the SHA-512 is not reversable, it can be cracked using a brute-force method aswell. You can not produce the password from a hash, but you can create hashes of millions of passwords until you find one that matches. For this reason, the hash's strength isn't based so much on the key length of the hashing algorithm, but on the length of the password itself. And because passwords have such low entropy, are predictable, and are often too short, this usually is not a difficult task but a task that would take months or even years to crack [8](https://www.sciencedirect.com/topics/computer-science/hashing-algorithm). There would be approximately ![equation11](https://latex.codecogs.com/svg.image?2^{512}) posossible input values.
 
@@ -283,12 +284,14 @@ https://medium.com/@zaid960928/cryptography-explaining-sha-512-ad896365a0c1 <br>
 https://www.sciencedirect.com/topics/computer-science/message-digest <br>
 [8] ScienceDirect, Hashing Algorithm, <br>
 https://www.sciencedirect.com/topics/computer-science/hashing-algorithm <br>
-[9] The C Programming Language, Brian W.Kernighan, Dennis M. Ritchie.
+[9] The C Programming Language, Brian W.Kernighan, Dennis M. Ritchie,
 http://117.3.71.125:8080/dspace/bitstream/DHKTDN/6554/1/The%20C%20Programming%20Language4603.pdf <br>
 [10] Medium, Cryptography: Explaining SHA-512, <br>
-https://medium.com/@zaid960928/cryptography-explaining-sha-512-ad896365a0c1#:~:text=SHA%2D512%20is%20a%20hashing, digital%20certificates%20and%20even%20blockchains. <br>
+https://medium.com/@zaid960928/cryptography-explaining-sha-512-ad896365a0c1#:~:text=SHA%2D512%20is%20a%20hashing <br>
 [11] StackExchange, Why are hash functions one way, <br>
 https://security.stackexchange.com/questions/11717/why-are-hash-functions-one-way-if-i-know-the-algorithm-why-cant-i-calculate-t
+[12] Private Canada, Why Are Hashes Irreversible>,
+https://privacycanada.net/hash-functions/why-are-hashes-irreversible/
 
 ## Google Scholar Referances
 [A1] Sumagita, M., Riadi, I., Sh, J.P.D.S. and Warungboto, U., 2018. Analysis of secure hash algorithm (SHA) 512 for encryption process on web based application. International Journal of Cyber-Security and Digital Forensics (IJCSDF), 7(4), pp.373-381.

@@ -86,67 +86,63 @@ const WORD K[] = {
     Returns 0 if all padded message has already been consumed.
 */
 int next_block(FILE *f, union Block *M, enum Status *S, uint64_t *nobits){
-    
-    // Error handling
-    if (f == NULL){
-        printf("Error when opening file");
-    } else {
-        // Number of bites to read
-        size_t nobytes;
+   
+    // Number of bites to read
+    size_t nobytes;
         
-        // Check if status is end
-        if(*S == END){
-            return 0;
-        } else if (*S == READ){
-            // Try to read 128 bytes from file
-            nobytes = fread(M->bytes, 1, 128, f); 
-            // Calculate total bits read so far
-            *nobits = *nobits + (8 * nobytes); 
+    // Check if status is end
+    if(*S == END){
+        return 0;
+    } else if (*S == READ){
+        // Try to read 128 bytes from file
+        nobytes = fread(M->bytes, 1, 128, f); 
+        // Calculate total bits read so far
+        *nobits = *nobits + (8 * nobytes); 
 
-            if(nobytes == 128){
-                // This happens when we can read 64 bytes from f
-                // Return nothing
+        if(nobytes == 128){
+            // This happens when we can read 64 bytes from f
+            // Return nothing
             // step 3
-            } else if(nobytes < 120){
-                // Append a 1 bit 
-                // This executes when program has enough room for padding
-                M->bytes[nobytes] = 0x80;
-                // Append enough 0 bits, leaving 120 at the end
-                for (nobytes++; nobytes < 120; nobytes++) { 
-                    // Keep adding 0's
-                    M->bytes[nobytes] = 0x00;
-                }
-
-                // Append length of original input & checking endiness
-                M->sixf[15] = (islilend() ? bswap_64(*nobits) : *nobits);
-                // Last block
-                // Set status to end
-                *S = END;
-            } else {
-                /*
-                    Got to the end of the input message but not enough room in 
-                    this block for all the padding.
-                */
-                M->bytes[nobytes] = 0x80;
-                // Append 0 bits
-                for (nobytes++; nobytes < 128; nobytes++){
-                    M->bytes[nobytes] = 0x00;
-                }
-                // Change the status to PAD
-                *S = PAD;
+        } else if(nobytes < 120){
+            // Append a 1 bit 
+            // This executes when program has enough room for padding
+            M->bytes[nobytes] = 0x80;
+            // Append enough 0 bits, leaving 120 at the end
+            for (nobytes++; nobytes < 120; nobytes++) { 
+                // Keep adding 0's
+                M->bytes[nobytes] = 0x00;
             }
 
-            // Executes when program does not have enough padding for the last block
-            } else if(*S == PAD){
-                // Append 0 bits
-                for (nobytes = 0; nobytes < 120; nobytes++){ 
-                    M->bytes[nobytes] = 0x00;
-                }
-                // Append no bits as an int & checking endiness
-                M->sixf[15] = (islilend() ? bswap_64(*nobits) : *nobits);
-                // Change the status to PAD
-                *S = END;
+            // Append length of original input & checking endiness
+            M->sixf[15] = (islilend() ? bswap_64(*nobits) : *nobits);
+            // Last block
+            // Set status to end
+            *S = END;
+        } else {
+            /*
+                Got to the end of the input message but not enough room in 
+                this block for all the padding.
+            */
+            M->bytes[nobytes] = 0x80;
+            // Append 0 bits
+            for (nobytes++; nobytes < 128; nobytes++){
+                M->bytes[nobytes] = 0x00;
             }
+            // Change the status to PAD
+            *S = PAD;
+        }
+
+        // Executes when program does not have enough padding for the last block
+        } else if(*S == PAD){
+            // Append 0 bits
+            for (nobytes = 0; nobytes < 120; nobytes++){ 
+                M->bytes[nobytes] = 0x00;
+            }
+            // Append no bits as an int & checking endiness
+            M->sixf[15] = (islilend() ? bswap_64(*nobits) : *nobits);
+            // Change the status to PAD
+            *S = END;
+        }
 
         // Swap the byte order of the words if little endian.
         if (islilend())
@@ -154,7 +150,7 @@ int next_block(FILE *f, union Block *M, enum Status *S, uint64_t *nobits){
                 M->words[i] = bswap_64(M->words[i]);
 
         return 1;
-    }
+    
 }
 
 /*
@@ -217,6 +213,48 @@ int next_hash(union Block *M, WORD H[]){
     return 0;
 }
 
+void cmd_line_arguments(int option){
+    switch (option){
+        case 0:
+            printf("\n---No command line argument specified---\n");
+            printf("\nInput - 1: SHA-512 Architecture Diagram & Explanation\n");
+            break;
+        case 1:
+            printf("The SHA-512 algorithm is part of a set of crytographic hash functions designed by the United States National Security (NSA).");
+            printf("The SHA-512 hashing algorithm is a one way function that accepts a message of any length, then returns the appropriate SHA512 message digest.");
+            printf("The algorithm itself consists of creating defined functions, declaring constants, preprocessing and hash computation.\n\n");
+
+            printf("            +                                                        \n");
+            printf("            |  64 bits  (constants/ functions)                       \n");
+            printf("            |                                                        \n");
+            printf("            v                                                        \n");
+            printf("+-----------+----------+                    <-----------------------^\n");
+            printf("|                      |                    |                       |\n");
+            printf("|   Padding Process    |                    |                       |\n");
+            printf("|                      |                    |                       |\n");
+            printf("+-----------+----------+                    |                       ^\n");
+            printf("            |                   +-----------v------------+          |\n");
+            printf("            |      1024 bits    |                        |          |\n");
+            printf("            +------------------>+  Compression Function  |          |\n");
+            printf("                                |                        |          |\n");
+            printf("                                +-----------+------------+          |\n");
+            printf("                                            |                       |\n");
+            printf("                                            |                       |\n");
+            printf("                                            |                       |\n");
+            printf("                                            +----------------------->\n");
+            printf("                                            |                        \n");
+            printf("                                            |                        \n");
+            printf("                                            |                        \n");
+            printf("                                            v                        \n");
+            printf("                                       512 bit hash                  \n");
+            
+            printf("\nThe SHA-512 hashing algorithm processes data in 1024-bit blocks,\n");
+            printf("The output from SHA-512 is a 512-bit message digest value.\n");
+            printf("For more information visit: https://github.com/GraceKeane/theory-algos-project\n\n");
+            break;
+    }
+}
+
 /*
     Function that actuallt does the SHA512 computation
 */
@@ -240,25 +278,6 @@ int sha512(FILE *f, WORD H[]){
     return 0;
 }
 
-/* -------------------- Command Line Argument Outputs ------------------ */
-void cmd_line_args(int option) {
-    switch (option) {
-     case 0: // Case 0 - No command line arguments were entered
-        printf("\n*No command line argument specified, 'SHA512 --help' will list all valid command line arguments.\n");
-        printf("\nInput - 1: Perform SHA-512 on a File            ");
-        printf("\nInput - 2: Perform SHA-512 on a String        \n");
-        printf("\nChoose an option: ");
-        break;
-    case 1:
-        printf("\n Performing SHA-512 on an inputted file");
-        break;
-    case 2:
-        printf("Enter a string");
-    break;
-    }
-}
-
-
 /*
     Sets the initial hash value, opens file for reading 
     and sends a message to sha512 to calculate the hash 
@@ -272,6 +291,7 @@ int main(int argc, char *argv[]){
 
     /* Input vars */
     int option;
+    int c;
     /* Declaration of file/string inputs */
     char fileName[100];
     char inputString[50];                      
@@ -283,40 +303,44 @@ int main(int argc, char *argv[]){
         0x510e527fade682d1, 0x9b05688c2b3e6c1f, 0x1f83d9abfb41bd6b, 0x5be0cd19137e2179
     };
 
-    // *Need error checking here*
-
     // File pointer
     FILE *f;
-
     // Open file from command line for reading
     f = fopen(argv[1], "r");
 
-    if (option == 2){
-        printf("Enter a String: ");
-        scanf("%s", inputString);
-
-         /* Open new file */        
-        f =  fopen("cmd-input/CMDInput.txt", "w");
-        /* Write user input to the file */ 
-        fprintf(f, "%s", inputString);
-        fclose(f);
-
-        /* Open the file to read */
-        f = fopen("cmd-input/CMDInput.txt", "rb");
-        printf("Processing String ...\nSHA512: ");
-        sha512(f, H);
-        fclose(f);
-    } else {
-        //printf("\nInvalid Input\nExiting ...\n");
-    }
-    
-
     // Error handling
     if (argv[1] == NULL){
-        printf("Error when opening file");
-        return 0;
-    } else {
+        cmd_line_arguments(0);
+        scanf("%d", &option);
 
+        if(option == 1){
+            cmd_line_arguments(1);
+        }
+    }
+
+    else {
+        static struct option long_options[] = {
+            {"help"      , no_argument      , 0, 'h'},
+            {"test"      , no_argument      , 0, 't'},
+            {"explain"   , no_argument      , 0, 'e'},
+            {"hashfile"  , required_argument, 0, 'f'},
+            {"hashstring", required_argument, 0, 's'},
+            {0           , 0                , 0,  0 }
+        };
+
+         /* getopt_long stores the option index here */
+        int option_index = 0;
+
+        c = getopt_long (argc, argv, "h:t:e:f:s", long_options, &option_index);
+        switch (c) {
+            case 'h':
+                /* Display some helpful information to the user */
+                cmd_line_arguments(2);
+                break;
+        }
+    }
+    
+    
         sha512(f, H);
 
         // Print the SHA512 hash of f
@@ -327,5 +351,5 @@ int main(int argc, char *argv[]){
         // Close this file
         fclose(f);
         return 0;
-    }
+      
 }
