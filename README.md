@@ -1,9 +1,9 @@
 <h2 align="center">
-    SHA512 Calculator
+    SHA-512 Calculator
 </h3>
 
 <h3 align="center">
-    A program written in C that calculates the SHA512 of an input
+    A program written in C that calculates the SHA-512 of an input
 </h4>
 
 <p align="center">
@@ -113,7 +113,6 @@ I have included an additional feature which executes when no command line argume
 1. Allows users to enter a string in manually 
 2. Allow users to enter a file in manually
 
-## Program Output
 <p align="center">
   <img src="./img/options.PNG" width=650 heigh=500/>
 </p>
@@ -280,11 +279,15 @@ But why is it important for them to not be able to be reversed? The secure hash 
 <b>Can you design an algorithm that, given enough time, will find input messages that give each of the possible 512-bit strings?</b><br>
 
 <b>How difficult is it to find a hash digest beginning with at least twelve zeros?</b><br>
-Bitcoin mining is designed to find a string <i>s</i> such that the sha512 has <i>n</i> leading zeros, where <i>n</i> determines the mining difficulty [13]. Difficulty is a value used to show how hard is it to find a hash that will be lower than a specific target defined by system, for example a hash with twelve leading zeros. Imagine a hash is only three digits long. If there is no leading zero ("999") then there are a thousand possible numbers (0-999) that are lower than that specific hash. If there is one leading zero ("099"), there are now only one hundred possible numbers lower than that hash value. The more leading zeros a value has, the longer it will take to find. The Bitcoin network has a global block difficulty. Valid blocks must have a hash below this target. Mining pools also have a pool-specific share difficulty setting a lower limit for shares. In Bitcoin network there is a global difficulty set for all blocks. The mining difficulty formula is defined below.
+Bitcoin mining is designed to find a string <i>s</i> such that the sha512 has <i>n</i> leading zeros, where <i>n</i> determines the mining difficulty [13]. The probability of calculating a hash that starts with many zeros is very low, therefore many attemps must be made. Difficulty is a value used to show how hard is it to find a hash that will be lower than a specific target defined by system, for example a hash with twelve leading zeros. Imagine a hash is only three digits long. If there is no leading zero ("999") then there are a thousand possible numbers (0-999) that are lower than that specific hash. If there is one leading zero ("099"), there are now only one hundred possible numbers lower than that hash value. The same idea relates to a hash with twelve leading zeros. The more leading zeros a value has, the longer and more difficult it will be to find, aswell as the additional computing power it will acquire. The Bitcoin network has a global block difficulty. The mining difficulty formula is defined below.
 
 ```difficulty = difficulty_1_target / current_target```
 
-Therefore the difficulty of finding a bitcoin with twelve leading zeros would be a 12 - 13 trillion mining difficulty. Today, Bitcoin miners are looking for an output greater than twelve leading zeros. Miners have to find a hash which starts with nineteen zeroes which is a difficulty level of 23.1 trillion. To get this number requires many, many attempts. Once the hash is found, the block is closed and it is added to the blockchain. After successfully mining a block, miners are rewarded with newly-created Bitcoins and transaction fees [14].
+The difficulty of finding a bitcoin with twelve leading zeros would be a 13 trillion mining difficulty. Today, Bitcoin miners are looking for an output greater than twelve leading zeros. Miners have to find a hash which starts with nineteen zeroes which is a difficulty level of 23.1 trillion. To get this number requires many, many attempts. Once the hash is found, the block is closed and it is added to the blockchain. After successfully mining a block, miners are rewarded with newly-created Bitcoins and transaction fees [14]. 
+
+What are the benefits of Cryptocurrency difficulty? Satoshi Nakamoto explains how the proof-of-work difficulty helps to generate a steady production of new blocks added to the blockchain. <i>"To compensate for increasing hardware speed and varying interest in running nodes over time, the proof-of-work difficulty is determined by a moving average targeting an average number of blocks per hour. If they're generated too fast, the difficulty increases" </i> [A2]. This method is to endure fair game amongst bitcoin miners.
+
+Difficulty rates are also important for network security. The higher the cryptocurrency difficulty, the more guesses or hashes are needed to reach the target hash requirement. As a result, this process makes it very difficult and expensive for attackers to gain the majority control and in turn prevents malicious attacks. 
 
 ## Referances
 [1] GitHub, Markdown Cheetsheet, <br>
@@ -309,7 +312,7 @@ http://117.3.71.125:8080/dspace/bitstream/DHKTDN/6554/1/The%20C%20Programming%20
 https://medium.com/@zaid960928/cryptography-explaining-sha-512-ad896365a0c1#:~:text=SHA%2D512%20is%20a%20hashing <br>
 [11] StackExchange, Why are hash functions one way, <br>
 https://security.stackexchange.com/questions/11717/why-are-hash-functions-one-way-if-i-know-the-algorithm-why-cant-i-calculate-t <br>
-[12] Private Canada, Why Are Hashes Irreversible>, <br>
+[12] Private Canada, Why Are Hashes Irreversible?, <br>
 https://privacycanada.net/hash-functions/why-are-hashes-irreversible/ <br>
 [13] StackExchange, Mining Difficulty and Leading Zeros, <br>
 https://bitcoin.stackexchange.com/questions/85896/mining-difficulty-and-leading-zeros <br>
@@ -317,5 +320,7 @@ https://bitcoin.stackexchange.com/questions/85896/mining-difficulty-and-leading-
 https://www.luno.com/blog/en/post/bitcoins-hash-rate-is-hitting-record-highs-but-does-it-even-matter <br>
 
 ## Google Scholar Referances
-[A1] Sumagita, M., Riadi, I., Sh, J.P.D.S. and Warungboto, U., 2018. Analysis of secure hash algorithm (SHA) 512 for encryption process on web based application. International Journal of Cyber-Security and Digital Forensics (IJCSDF), 7(4), pp.373-381.
+[A1] Sumagita, M., Riadi, I., Sh, J.P.D.S. and Warungboto, U., 2018. Analysis of secure hash algorithm (SHA) 512 for encryption process on web based application. International Journal of Cyber-Security and Digital Forensics (IJCSDF), 7(4), pp.373-381. <br>
+
+[A2] Nakamoto, S., 2019. Bitcoin: A peer-to-peer electronic cash system. Manubot.
 
