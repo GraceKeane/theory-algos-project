@@ -7,10 +7,10 @@
 </h4>
 
 <p align="center">
-  <img src="./img/logo.jpeg" width=600 height=400/>
+  <img src="./img/logo.jpeg" width=600 height=250/>
 </p>
 
-## Project Details\
+## Project Details
 Heading  | Details
 -------- | -------------------------------------
 Project  | [Project Spec](https://github.com/ianmcloughlin/theory-algos-project)
@@ -103,9 +103,20 @@ The table below contains a list of valid command-line arguments specific to the 
 | Valid Arguments | Input Example | Output |
 | :---:           |     :---:      |     :---: |
 | --help          | ```./SHA512 --help``` | Will detail additional arguments and examples on how to execute them|
-| --explain       | ```./SHA512 --explain``` | Displays a brief explanation of SHA512 including an ASCII high-level diagram|
+| --explain       | ```./SHA512 --explain``` | Displays a brief explanation of SHA512 including a diagram|
 | --hashstring    | ```./SHA512 --hashstring abcde``` | Allows the user to input any string and calculates the SHA512 of that input|
 | --hashfile      | ```./SHA512 --hashfile abc.txt``` | Allows the user to input a file and calculates the SHA512 of that input|
+
+<b>Additional feature: </b>
+I have included an additional feature which executes when no command line argument is entered. This feature was created to avoid confusion felt by the user. By typing in ```./SHA512```  this executes a prompt which allows the user to pick one of two options.
+
+1. Allows users to enter a string in manually 
+2. Allow users to enter a file in manually
+
+## Program Output
+<p align="center">
+  <img src="./img/options.PNG" width=650 heigh=500/>
+</p>
 
 ## Project Implementation
 ### Creating the SHA512 functions (Section 4.1.3)
@@ -269,11 +280,11 @@ But why is it important for them to not be able to be reversed? The secure hash 
 <b>Can you design an algorithm that, given enough time, will find input messages that give each of the possible 512-bit strings?</b><br>
 
 <b>How difficult is it to find a hash digest beginning with at least twelve zeros?</b><br>
-Bitcoin mining is designed to find a string <i>s</i> such that the sha512 has <i>n</i> leading zeros, where <i>n</i> determines the mining difficulty [13]. Difficulty is a value used to show how hard is it to find a hash that will be lower than a specific target defined by system, for example a hash with twelve leading zeros. The Bitcoin network has a global block difficulty. Valid blocks must have a hash below this target. Mining pools also have a pool-specific share difficulty setting a lower limit for shares. In Bitcoin network there is a global difficulty set for all blocks that is defined below.
+Bitcoin mining is designed to find a string <i>s</i> such that the sha512 has <i>n</i> leading zeros, where <i>n</i> determines the mining difficulty [13]. Difficulty is a value used to show how hard is it to find a hash that will be lower than a specific target defined by system, for example a hash with twelve leading zeros. Imagine a hash is only three digits long. If there is no leading zero ("999") then there are a thousand possible numbers (0-999) that are lower than that specific hash. If there is one leading zero ("099"), there are now only one hundred possible numbers lower than that hash value. The more leading zeros a value has, the longer it will take to find. The Bitcoin network has a global block difficulty. Valid blocks must have a hash below this target. Mining pools also have a pool-specific share difficulty setting a lower limit for shares. In Bitcoin network there is a global difficulty set for all blocks. The mining difficulty formula is defined below.
 
 ```difficulty = difficulty_1_target / current_target```
 
-Today, Bitcoin miners are looking for an output with a certain number of zeros. Miners have to find a hash which starts with nineteen zeroes. To get this number requires many, many attempts. Once the hash is found, the block is closed and it is added to the blockchain. After successfully mining a block, miners are rewarded with newly-created Bitcoins and transaction fees [14].
+Therefore the difficulty of finding a bitcoin with twelve leading zeros would be a 12 - 13 trillion mining difficulty. Today, Bitcoin miners are looking for an output greater than twelve leading zeros. Miners have to find a hash which starts with nineteen zeroes which is a difficulty level of 23.1 trillion. To get this number requires many, many attempts. Once the hash is found, the block is closed and it is added to the blockchain. After successfully mining a block, miners are rewarded with newly-created Bitcoins and transaction fees [14].
 
 ## Referances
 [1] GitHub, Markdown Cheetsheet, <br>
@@ -298,8 +309,8 @@ http://117.3.71.125:8080/dspace/bitstream/DHKTDN/6554/1/The%20C%20Programming%20
 https://medium.com/@zaid960928/cryptography-explaining-sha-512-ad896365a0c1#:~:text=SHA%2D512%20is%20a%20hashing <br>
 [11] StackExchange, Why are hash functions one way, <br>
 https://security.stackexchange.com/questions/11717/why-are-hash-functions-one-way-if-i-know-the-algorithm-why-cant-i-calculate-t <br>
-[12] Private Canada, Why Are Hashes Irreversible>,
-https://privacycanada.net/hash-functions/why-are-hashes-irreversible/
+[12] Private Canada, Why Are Hashes Irreversible>, <br>
+https://privacycanada.net/hash-functions/why-are-hashes-irreversible/ <br>
 [13] StackExchange, Mining Difficulty and Leading Zeros, <br>
 https://bitcoin.stackexchange.com/questions/85896/mining-difficulty-and-leading-zeros <br>
 [14] Luno, Bitcoin’s hash rate is hitting record highs, but does it even matter?, <br>
