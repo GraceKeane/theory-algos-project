@@ -107,8 +107,22 @@ The table below contains a list of valid command-line arguments specific to the 
 | --hashstring    | ```./SHA512 --hashstring abcde``` | Allows the user to input any string and calculates the SHA512 of that input|
 | --hashfile      | ```./SHA512 --hashfile abc.txt``` | Allows the user to input a file and calculates the SHA512 of that input|
 
+
+The arguments were implemented with help from the ```GetOpt::Long``` module. This allows quick definitions of Unix-like interfaces options into the program.
+
+The Arguments could be declared and assigned to a character, in my case, after research [9] they were implemented as an array and associated with a single character meaning it could be utilized and delegated to a single Switch statement. Another benefit is that it could be specified whether to expect an additional argument, like in the case for both --hashfile and --hashstring.
+``` c
+static struct option long_options[] = {
+    {"help"      , no_argument      , 0, 'h'},
+    {"explain"   , no_argument      , 0, 'e'},
+    {"hashfile"  , required_argument, 0, 'f'},
+    {"hashstring", required_argument, 0, 's'},
+    {0           , 0                , 0,  0 }
+};
+```
+
 <b>Additional feature: </b>
-I have included an additional feature which executes when no command line argument is entered. This feature was created to avoid confusion felt by the user. By typing in ```./SHA512```  this executes a prompt which allows the user to pick one of two options.
+I have included an additional command line feature which executes when no command line argument is entered. This feature was created to avoid confusion felt by the user. By typing in ```./SHA512```  this executes a prompt which allows the user to pick one of two options.
 
 1. Allows users to enter a string in manually 
 2. Allow users to enter a file in manually
