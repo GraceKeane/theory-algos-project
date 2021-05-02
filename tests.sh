@@ -1,7 +1,7 @@
 #!/bin/bash
 echo "Testing algorithm on abc.txt"
 expec="$(sha512sum abc.txt)"
-myout="$(./SHA512 abc.txt)  abc.txt"
+myout="$(./SHA512 --hashfile abc.txt)  abc.txt"
 echo "Expected: " $expec
 echo "Output: " $myout
 
@@ -13,7 +13,7 @@ fi
 
 echo "Testing algorithm on empty.txt"
 expec="$(sha512sum empty.txt)"
-myout="$(./SHA512 empty.txt)  empty.txt"
+myout="$(./SHA512 --hashfile empty.txt)  empty.txt"
 echo "Expected: " $expec
 echo "Output: " $myout
 

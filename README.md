@@ -22,7 +22,7 @@ Lecturer | Dr Ian McLoughlin
 
 ## Program Output
 <p align="center">
-  <img src="./img/output.PNG" width=650 heigh=500/>
+  <img src="./img/sampleoutput.PNG" width=650 heigh=500/>
 </p>
 
 ## Contents
@@ -77,9 +77,12 @@ Nicer ZSH shell (optional): ``` sh -c "$(curl -fsSL https://raw.github.com/ohmyz
 1. In your command line terminal: ```git clone https://github.com/GraceKeane/theory-algos-project.git```<br>
 2. Navigate to the <b> \program\ </b> directory: ```cd theory-algos-project```<br>
 3. Compile the program: ```make```<br>
-4. Execute the program: ```./SHA512 abc.txt```<br>
-5. Execute options: ```./SHA512``` <br>
-6. Run tests: ```make test``` <br>
+4. Execute options program: ```./SHA512``` <br>
+5. Execute help cmd line output: ```./SHA512 --help``` <br>
+6. Execute explain cmd line output: ```./SHA512 --explain``` <br>
+7. Execute hashstring cmd line output: ```./SHA512 --hashstring anystringhere``` <br>
+8. Execute hashfile cmd line output:  ```./SHA512 --hashfile filename``` <br>
+9. Run tests: ```make test``` <br>
 
 ## Command Line Arguments
 The C programming language allows for the use of command-line arguments. Command-line arguments allow data to be provided to the program at runtime. Arguments can be passed to the main method if the main method is declared as follows.
@@ -128,7 +131,7 @@ I have included an additional command line feature which executes when no comman
 2. Allow users to enter a file in manually
 
 <p align="center">
-  <img src="./img/options.PNG" width=650 heigh=500/>
+  <img src="./img/cmdselection.PNG" width=650 heigh=500/>
 </p>
 
 ## Project Implementation
@@ -179,29 +182,15 @@ const WORD K[] = {
 <b>Preprocessing consists of 3 steps which are padding the message, parsing the message into message blocks and setting the initial hash value.</b>
 
 #### Padding the message (Section 5.1.2)
-The purpose of padding is to ensure that the padded message is a multiple of 1024 bits. The end result of padding should be a message in a multiple of 1024 bits.
-
-``` c
-if(nobytes == 128){
-
-}
-```
+The purpose of padding is to ensure that the padded message is a multiple of 1024 bits. SHA-512 can’t hash a message input of any size, i.e. it has an input size limit. The entire formatted message has basically three parts: the original message, padding bits and the size of original message. This should all have a combined size of a whole multiple of 1024 bits. This is because the formatted message will be processed as blocks of 1024 bits each, so each bock should have 1024 bits to work with. The end result of padding should be a message in a multiple of 1024 bits.
 
 #### Parsing the message into message blocks (Section 5.2.2)
 The message and its padding are parsed into <i>N</i> 1024-bit blocks. Since the 1024 bits of the input block may be expressed as 64-bit words, the first 64 bits <i>i</i> are donated ![equation3](https://latex.codecogs.com/svg.image?M\tfrac{(i)}{0})
 , the next 64 bits are to the power of ![equation4](https://latex.codecogs.com/svg.image?M\tfrac{(i)}{0})
  and so on until ![equation5](https://latex.codecogs.com/svg.image?M\tfrac{(i)}{15}).
 
-``` c
-else if(nobytes < 120){
-	M->bytes[nobytes] = 0x80;
-    for (nobytes++; nobytes < 120; nobytes++) { 
-		M->bytes[nobytes] = 0x00;
-    }
-```
-
 #### Setting the initial hash value (Section 5.3.5)
-The initial hash value ![equation6](https://latex.codecogs.com/svg.image?H^{(0)}) must be initialised. The size and number of words depends on the message digest. For SHA512 the initial hash value consists of the following eight 64-bit words, in hex. These words were obtained by taking the first 64 bits of the fractional parts of the square roots of the first eight prime numbers.
+The initial hash value ![equation6](https://latex.codecogs.com/svg.image?H^{(0)}) must be initialised. The size and number of words depends on the message digest. For SHA-512 the initial hash value consists of the following eight 64-bit words, in hex. These words were obtained by taking the first 64 bits of the fractional parts of the square roots of the first eight prime numbers.
 
 ``` c
 WORD H[] = {
@@ -231,7 +220,7 @@ g = H[6];
 h = H[7];
 ``` 
 
-3) Create a for loop to loop initialized from 0 - 79 
+3) Create a for loop initialized from 0 - 79 
 ``` c
 for(t = 0; t < 80; t++) {
     T1 = h + SIG1(e) + CH(e, f, g) + K[t] + W[t];
@@ -284,7 +273,7 @@ Hash algorithms such as the SHA-512 algorithm are most commonly used for securit
 
 It is unclear whether one-way functions can actually exist. Right now, there are many functions that no one knows how to invert; but this does not mean that they are impossible to invert, in a mathematical sense [11]. The SHA-512 algorithm is designed to make finding the corresponding input to an output extremely dificult. If ones goal is to find an input that generates a given hash, there should be no way to do it that's faster than brute force - trying every input in turn until one works. 
 
-There are two main reasons why the SHA-512 can not be reversed, one being hash functions essentially discard information in a very deterministic way – using the modulo operator. For a quick review, modulus is essentially the same as saying “the remainder of” (applying to division). An example of this would be 16 <i>mod</i> 5 = 1. What’s happening here is that by dividing 16 by 5, the result of the operation is whatever is left over – or the remainder. The modulo operation is not reversible [12]. There are infinite possible number combinations that you could use to get that original input value.
+There are two main reasons why the SHA-512 can not be reversed, one being hash functions essentially discard information in a very deterministic way – using the modulo operator. For a quick review, modulus is essentially the same as saying “the remainder of” (applying to division). An example of this would be 16 <i>mod</i> 5 = 1. What’s happening here is that by dividing 16 by 5, the result of the operation is whatever is left over – or the remainder. The modulo operation is not reversible [12]. There are infinite possible number combinations that you could use to get that original input value. 
 
 Another reason is because data is lost after computation. Consider a simple example function 'OR'. If you applied this to an input function of 1 and 0 the solution would be 1. But now having known the answer you cannot revert post solution due to data loss. Instead you are left with three differant possible answers for example (1,1), (0,1) or (1,0). Only brute force could possibly find the correct input variables. The SHA-512 algorithm follows the same idea. Although the SHA-512 is not reversable, it can be cracked using a brute-force method aswell. You can not produce the password from a hash, but you can create hashes of millions of passwords until you find one that matches. For this reason, the hash's strength isn't based so much on the key length of the hashing algorithm, but on the length of the password itself. And because passwords have such low entropy, are predictable, and are often too short, this usually is not a difficult task but a task that would take months or even years to crack [8]. There would be approximately ![equation11](https://latex.codecogs.com/svg.image?2^{512}) posossible input values.
 
@@ -292,8 +281,12 @@ But why is it important for them to not be able to be reversed? The secure hash 
 
 <b>Can you design an algorithm that, given enough time, will find input messages that give each of the possible 512-bit strings?</b><br>
 
+Hashing algorithms such as sha512 cannot be reverse computed to their original form as I have detailed above but it would be possible to design an algorithm that could find input messages that gives each possible 512-bit strings. 
+
+Although you can not produce the inputs automatically from a hash, only brute force could possibly produce the final input value, but you could program an algorithm that would be able to find input messages of each 512 bit strings. This algorithm would only work given you have enough space and time due to the fact that for any given hash there is approximately ![equation12](https://latex.codecogs.com/svg.image?2^{2^{512}}) posossible input values that the algorithm would have to search and output, this would take a tremendous amount of time and power to compute.
+
 <b>How difficult is it to find a hash digest beginning with at least twelve zeros?</b><br>
-Bitcoin mining is designed to find a string <i>s</i> such that the sha512 has <i>n</i> leading zeros, where <i>n</i> determines the mining difficulty [13]. The probability of calculating a hash that starts with many zeros is very low, therefore many attemps must be made. Difficulty is a value used to show how hard is it to find a hash that will be lower than a specific target defined by system, for example a hash with twelve leading zeros. Imagine a hash is only three digits long. If there is no leading zero ("999") then there are a thousand possible numbers (0-999) that are lower than that specific hash. If there is one leading zero ("099"), there are now only one hundred possible numbers lower than that hash value. The same idea relates to a hash with twelve leading zeros. The more leading zeros a value has, the longer and more difficult it will be to find, aswell as the additional computing power it will acquire. The Bitcoin network has a global block difficulty. The mining difficulty formula is defined below.
+Bitcoin mining is designed to find a string <i>s</i> such that the sha512 has <i>n</i> leading zeros, where <i>n</i> determines the mining difficulty [13]. The probability of calculating a hash that starts with many zeros is very low, therefore many attemps must be made. Difficulty is a value used to show how hard is it to find a hash that will be lower than a specific target defined by system, for example a hash with twelve leading zeros. Imagine a hash is only three digits long. If there is no leading zero ("999") then there are a thousand possible numbers (0-999) that are lower than that specific hash. If there is one leading zero ("099"), there are now only one hundred possible numbers lower than that hash value. The same idea relates to a hash with twelve leading zeros. The more leading zeros a value has, the longer and more difficult it will be to find, aswell as the additional computing power it will acquire. As a result there would be around ![equation13](https://latex.codecogs.com/svg.image?2^{48}) that would have a hash value with 12 leading zeros. The Bitcoin network has a global block difficulty. The mining difficulty formula is defined below.
 
 ```difficulty = difficulty_1_target / current_target```
 

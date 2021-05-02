@@ -270,9 +270,7 @@ int main(int argc, char *argv[]){
     };
 
     /* File pointer */
-    FILE *f;
-    /* Open file from command line for reading */
-    f = fopen(argv[1], "r");
+    FILE *f;    
 
     /* Allowing user run ./SHA512 without any arguments */
     if (argv[1] == NULL){
@@ -319,6 +317,7 @@ int main(int argc, char *argv[]){
             } else {
                 printf("\nInvalid Input\nExiting ...\n");   
         }
+        return 0;
     }
     else {
         /* Getops command line args - https://www.gnu.org/software/libc/manual/html_node/Getopt-Long-Option-Example.html */
@@ -371,7 +370,6 @@ int main(int argc, char *argv[]){
                 } 
                 /* Otherwise perform SHA-512 calculation on file */
                 else {
-                    printf("\nProcessing file ...\nSHA-512: ");
                     sha512(f, H);
 
                 for (int i = 0; i < 8; i++) 
@@ -379,16 +377,10 @@ int main(int argc, char *argv[]){
                     printf("\n");
                     fclose(f);
                 break;
-            }
+            default:
+                abort();        
+            } 
         }
+        return 0;
     }
-    sha512(f, H);
-    /* Print the SHA512 hash of f */
-    for (int i = 0; i < 8; i++) 
-        printf("%016" PF, H[i]);
-        printf("\n");
-        
-    /* Close this file */
-    fclose(f);
-    return 0;
 }
