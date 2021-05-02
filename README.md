@@ -25,6 +25,8 @@ Lecturer | Dr Ian McLoughlin
   <img src="./img/sampleoutput.PNG" width=650 heigh=500/>
 </p>
 
+<i>Figure 1, SHA-512 output</i>
+
 ## Contents
 - [Repository Description](#repository-description)
 - [SHA512 Overview](#sha512-overview)
@@ -132,10 +134,11 @@ static struct option long_options[] = {
 <p align="center">
   <img src="./img/cmdhelp.PNG" width=650 heigh=500/>
 </p>
-<i>Figure 1, --help getops command line argument executed</i>
+<br></br>
+<i>Figure 2, --help getops command line argument executed</i>
 
 <b>Additional feature: </b>
-I have included an additional command line feature which executes when no command line argument is entered. This feature was created to avoid confusion felt by the user. By typing in ```./SHA512```  this executes a prompt which allows the user to pick one of two options.
+I have included an additional command line feature which executes when no command line argument is entered. By typing in ```./SHA512```  this executes a prompt which allows the user to pick one of two options.
 
 1. Allows users to enter a string in manually 
 2. Allow users to enter a file in manually
@@ -143,7 +146,7 @@ I have included an additional command line feature which executes when no comman
 <p align="center">
   <img src="./img/cmdselection.PNG" width=650 heigh=500/>
 </p>
-<i>Figure 2, command line selection feature</i>
+<i>Figure 3, command line selection feature</i>
 
 ## Project Implementation
 ### Creating the SHA512 functions (Section 4.1.3)
@@ -271,24 +274,24 @@ print(byteorder)
 ``` 
 
 ### Testing
-I created a simple test bash script to determie does my sha512 algorithm defined as ```myout``` work correctly when compared to ```expec``` which is assigned the value of ```sha512sum abc```. I also included another test based on an empty file. The output of this program is essentially either a pass or fail. My executed test file is defined below. 
+I created a simple test bash script to determie does my SHA512 algorithm defined as ```myout``` work correctly when compared to ```expec``` which is assigned the value of ```sha512sum abc```. I also included another test based on an empty file. The output of this program is essentially either a pass or fail. My executed test file is defined below. 
 
 Command for testing: ```make test```:
 
 <p align="center">
   <img src="./img/test.PNG" width=650 heigh=500/>
 </p>
-<i>Figure 3, Executed bash tests</i>
+<i>Figure 4, Executed bash tests</i>
 
 ## Assignment Questions 
 <b>Why can't we reverse the SHA512 algorithm to retrieve the original message from a hash digest?</b><br>
 
-Hash algorithms such as the SHA-512 algorithm are most commonly used for security and for detecting if messages have been changed since the digests were generated. They provide encryption using an algorithm and no key and are also known as "one-way hash functions" [A1]. There is no possible way to reverse the encryption hence the reason they are called "hash" algorithms [7], with hash generally meaning "one way". They are designed specifically to take in an input, compute the hash function and output a hashed value as shown in <i> figure 4 </i>. This ensures that every bit of output is dependant upon every bit of the input. It prevents others from splitting the algorithm up and trying to reverse calculate an input from each of the output hash separately.  
+Hash algorithms such as the SHA-512 algorithm are most commonly used for security and for detecting if messages have been changed since the digests were generated. They provide encryption using an algorithm and no key and are also known as "one-way hash functions" [A1]. There is no possible way to reverse the encryption hence the reason they are called "hash" algorithms [7], with hash generally meaning "one way". They are designed specifically to take in an input, compute the hash function and output a hashed value as shown in <i> figure 5 </i>. This ensures that every bit of output is dependant upon every bit of the input. It prevents others from splitting the algorithm up and trying to reverse calculate an input from each of the output hash separately.  
 
 <p align="center">
   <img src="./img/diagram.png" width=600 height=250/>
 </p>
-<i><b>Figure 4, SHA algorithm diagram</b></i>
+<i><b>Figure 5, SHA algorithm diagram</b></i>
 <br></br>
 
 
@@ -304,7 +307,9 @@ But why is it important for them to not be able to be reversed? The secure hash 
 
 Hashing algorithms such as sha512 cannot be reverse computed to their original form as I have detailed above but it would be possible to design an algorithm that could find input messages that gives each possible 512-bit strings. 
 
-Although you can not produce the inputs automatically from a hash, only brute force could possibly produce the final input value, but you could possibly program an algorithm that would be able to find possible input messages of each 512 bit strings. This algorithm would only work given you have enough space and time or even a quantum computer due to the fact that for any given hash there is approximately ![equation12](https://latex.codecogs.com/svg.image?2^{2^{512}}) posossible input values that the algorithm would have to search and output, this would take a tremendous amount of time and power to compute. Quantum computers are great for solving optimization problems. They could possibly be able to find input messages that give each of the possible 512-bit strings. These computers are designed to crack the most complex of algorithms in little time. On the other hand it would take a normal computer millions of hears to compute [15]. 
+Although you can not produce the inputs automatically from a hash, only brute force could possibly produce the final input value, but you could possibly program an algorithm that would be able to find possible input messages of each 512 bit strings. This algorithm would only work given you have enough space and time or even a quantum computer due to the fact that for any given hash there is approximately ![equation12](https://latex.codecogs.com/svg.image?2^{2^{512}}) posossible input values that the algorithm would have to search and output, this would take a tremendous amount of time and power to compute.
+
+Quantum computers are great for solving optimization problems. They could possibly be able to find input messages that give each of the possible 512-bit strings. These computers are designed to crack the most complex of algorithms in little time. On the other hand it would take a normal computer millions of years to compute [15]. 
 
 Another possible problem that could be faced when designing an algorithm of this sort would be hash collisions. A hash collision is essentially two input strings of a hash function that produce the same hash result. Because hash functions have infinite input length and a predefined output length, there is inevitably going to be the possibility of two different inputs that produce the same output hash. If two separate inputs produce the same hash output, it is called a collision. 
 
