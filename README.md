@@ -134,7 +134,7 @@ static struct option long_options[] = {
 <p align="center">
   <img src="./img/cmdhelp.PNG" width=650 heigh=500/>
 </p>
-<br></br>
+
 <i>Figure 2, --help getops command line argument executed</i>
 
 <b>Additional feature: </b>
@@ -291,7 +291,7 @@ Hash algorithms such as the SHA-512 algorithm are most commonly used for securit
 <p align="center">
   <img src="./img/diagram.png" width=600 height=250/>
 </p>
-<i><b>Figure 5, SHA algorithm diagram</b></i>
+<i>Figure 5, SHA algorithm diagram</i>
 <br></br>
 
 
