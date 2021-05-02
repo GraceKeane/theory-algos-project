@@ -38,12 +38,16 @@ Lecturer | Dr Ian McLoughlin
 - [Referances](#referances)
 
 ## Repository Description
-This repository contains the C code to compute the SHA512 algorithm based on an input. The result of the program is a SHA512 message digest. This program also incorporates error handling, a make file, command line arguments and testing.
+This repository contains the C code to compute the SHA512 algorithm based on an input. The result of the program is a SHA512 message digest. This program also incorporates error handling, a make file, normal as well as getops command line arguments and bash testing.
 
 ```bash
 ├── img # Folders contains images discussed in README.md
 │   ├──  # logo.jpeg
+│   └──  # cmdselection.PNG
 │   └──  # diagram.png
+│   └──  # sampleoutput.png
+|   └──  # cmdhelp.PNG
+|   └──  # test.PNG
 ├── cmd-input # Folder containing getops command line inputted strings
 │   ├──  StringInput.txt # Command line strings are written to this for SHA-512 calculation
 ├── .gitignore # Text file listing files to ignore
@@ -58,7 +62,7 @@ This repository contains the C code to compute the SHA512 algorithm based on an 
 ## SHA512 Overview
 The SHA512 algorithm is part of a set of crytographic hash functions designed by the [United States National Security (NSA)](https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.180-4.pdf) and published in 2001 [4]. Hashing algorithms are primarily used to provide integrity [7]. There are numerous secure hash algorithms such as the SHA-1, SHA-224, SHA-256, SHA-384, SHA-512, SHA-512/224 and SHA-512/256. These are used for computation of condensed representation of electronic data. When a message of any length  less than ![equation1](https://latex.codecogs.com/gif.latex?2%5E%7B64%7D) bits (for SHA-1, SHA-224 and SHA-256) or less than ![equation2](https://latex.codecogs.com/gif.latex?2%5E%7B128%7D) bits (for SHA-384, SHA-512, SHA-512/224 and SHA-512/256) is input to a hash algorithm. The result is a specific output also known as a message digest which is essentially a compact representation of the binary data recieved as input [8]. These digests range in length from 160 to 512 bits, depending on the algorithm.
 
-The hash algorithms have secure in their name because, for a given algorithm, it is computationally infeasible to find a message that corresponds to a given message digest or to find two different messages that produce the same message digest. Any change at all to a message will give a different result.
+The hash algorithms have secure in their name because, for a given algorithm, it is computationally infeasible to find a message that corresponds to a given message digest or to find two different messages that produce the same message digest. Any change at all to a message will give a different result. The secure hash algorithms such as SHA512 are very important as they are widely used in internet security, digital certificates and even blockchains [10].
 
 ## Software Requirements
 1. [Windows 10 Education (recommended)](https://www.microsoft.com/en-ie/education/products/windows) <br>
@@ -81,7 +85,7 @@ Nicer ZSH shell (optional): ``` sh -c "$(curl -fsSL https://raw.github.com/ohmyz
 5. Execute help cmd line output: ```./SHA512 --help``` <br>
 6. Execute explain cmd line output: ```./SHA512 --explain``` <br>
 7. Execute hashstring cmd line output: ```./SHA512 --hashstring anystringhere``` <br>
-8. Execute hashfile cmd line output:  ```./SHA512 --hashfile filename``` <br>
+8. Execute hashfile cmd line output:  ```./SHA512 --hashfile filename.txt``` <br>
 9. Run tests: ```make test``` <br>
 
 ## Command Line Arguments
@@ -108,7 +112,7 @@ The table below contains a list of valid command-line arguments specific to the 
 | --help          | ```./SHA512 --help``` | Will detail additional arguments and examples on how to execute them|
 | --explain       | ```./SHA512 --explain``` | Displays a brief explanation of SHA512 including a diagram|
 | --hashstring    | ```./SHA512 --hashstring abcde``` | Allows the user to input any string and calculates the SHA512 of that input|
-| --hashfile      | ```./SHA512 --hashfile abc.txt``` | Allows the user to input a file and calculates the SHA512 of that input|
+| --hashfile      | ```./SHA512 --hashfile abc.txt``` | Allows the user to input a file and calculates the SHA512 of that specific file|
 
 
 The arguments were implemented with help from the ```GetOpt::Long``` module. This allows quick definitions of Unix-like interfaces options into the program.
@@ -124,6 +128,12 @@ static struct option long_options[] = {
 };
 ```
 
+<b>Example of a command line argument executed: </b>
+<p align="center">
+  <img src="./img/cmdhelp.PNG" width=650 heigh=500/>
+</p>
+<i>Figure 1, --help getops command line argument executed</i>
+
 <b>Additional feature: </b>
 I have included an additional command line feature which executes when no command line argument is entered. This feature was created to avoid confusion felt by the user. By typing in ```./SHA512```  this executes a prompt which allows the user to pick one of two options.
 
@@ -133,6 +143,7 @@ I have included an additional command line feature which executes when no comman
 <p align="center">
   <img src="./img/cmdselection.PNG" width=650 heigh=500/>
 </p>
+<i>Figure 2, command line selection feature</i>
 
 ## Project Implementation
 ### Creating the SHA512 functions (Section 4.1.3)
@@ -259,15 +270,25 @@ from sys import byteorder
 print(byteorder)
 ``` 
 
+### Testing
+I created a simple test bash script to determie does my sha512 algorithm defined as ```myout``` work correctly when compared to ```expec``` which is assigned the value of ```sha512sum abc```. I also included another test based on an empty file. The output of this program is essentially either a pass or fail. My executed test file is defined below. 
+
+Command for testing: ```make test```:
+
+<p align="center">
+  <img src="./img/test.PNG" width=650 heigh=500/>
+</p>
+<i>Figure 3, Executed bash tests</i>
+
 ## Assignment Questions 
 <b>Why can't we reverse the SHA512 algorithm to retrieve the original message from a hash digest?</b><br>
 
-Hash algorithms such as the SHA-512 algorithm are most commonly used for security and for detecting if messages have been changed since the digests were generated. They provide encryption using an algorithm and no key and are also known as "one-way hash functions" [A1]. There is no possible way to reverse the encryption hence the reason they are called "hash" algorithms [7], with hash generally meaning "one way". They are designed specifically to take in an input, compute the hash function and output a hashed value as shown in <i> figure 1 </i>. This ensures that every bit of output is dependant upon every bit of the input. It prevents others from splitting the algorithm up and trying to reverse calculate an input from each of the output hash separately.  
+Hash algorithms such as the SHA-512 algorithm are most commonly used for security and for detecting if messages have been changed since the digests were generated. They provide encryption using an algorithm and no key and are also known as "one-way hash functions" [A1]. There is no possible way to reverse the encryption hence the reason they are called "hash" algorithms [7], with hash generally meaning "one way". They are designed specifically to take in an input, compute the hash function and output a hashed value as shown in <i> figure 4 </i>. This ensures that every bit of output is dependant upon every bit of the input. It prevents others from splitting the algorithm up and trying to reverse calculate an input from each of the output hash separately.  
 
 <p align="center">
   <img src="./img/diagram.png" width=600 height=250/>
 </p>
-<i><b>Figure 1, SHA algorithm diagram</b></i>
+<i><b>Figure 4, SHA algorithm diagram</b></i>
 <br></br>
 
 
@@ -283,10 +304,14 @@ But why is it important for them to not be able to be reversed? The secure hash 
 
 Hashing algorithms such as sha512 cannot be reverse computed to their original form as I have detailed above but it would be possible to design an algorithm that could find input messages that gives each possible 512-bit strings. 
 
-Although you can not produce the inputs automatically from a hash, only brute force could possibly produce the final input value, but you could program an algorithm that would be able to find input messages of each 512 bit strings. This algorithm would only work given you have enough space and time due to the fact that for any given hash there is approximately ![equation12](https://latex.codecogs.com/svg.image?2^{2^{512}}) posossible input values that the algorithm would have to search and output, this would take a tremendous amount of time and power to compute.
+Although you can not produce the inputs automatically from a hash, only brute force could possibly produce the final input value, but you could possibly program an algorithm that would be able to find possible input messages of each 512 bit strings. This algorithm would only work given you have enough space and time or even a quantum computer due to the fact that for any given hash there is approximately ![equation12](https://latex.codecogs.com/svg.image?2^{2^{512}}) posossible input values that the algorithm would have to search and output, this would take a tremendous amount of time and power to compute. Quantum computers are great for solving optimization problems. They could possibly be able to find input messages that give each of the possible 512-bit strings. These computers are designed to crack the most complex of algorithms in little time. On the other hand it would take a normal computer millions of hears to compute [15]. 
+
+Another possible problem that could be faced when designing an algorithm of this sort would be hash collisions. A hash collision is essentially two input strings of a hash function that produce the same hash result. Because hash functions have infinite input length and a predefined output length, there is inevitably going to be the possibility of two different inputs that produce the same output hash. If two separate inputs produce the same hash output, it is called a collision. 
+
+The odds of a collision are of course very low, especially so for functions with very large output sizes. However as available computational power increases, the ability to brute force hash collisions becomes more and more feasible [16, 17].
 
 <b>How difficult is it to find a hash digest beginning with at least twelve zeros?</b><br>
-Bitcoin mining is designed to find a string <i>s</i> such that the sha512 has <i>n</i> leading zeros, where <i>n</i> determines the mining difficulty [13]. The probability of calculating a hash that starts with many zeros is very low, therefore many attemps must be made. Difficulty is a value used to show how hard is it to find a hash that will be lower than a specific target defined by system, for example a hash with twelve leading zeros. Imagine a hash is only three digits long. If there is no leading zero ("999") then there are a thousand possible numbers (0-999) that are lower than that specific hash. If there is one leading zero ("099"), there are now only one hundred possible numbers lower than that hash value. The same idea relates to a hash with twelve leading zeros. The more leading zeros a value has, the longer and more difficult it will be to find, aswell as the additional computing power it will acquire. As a result there would be around ![equation13](https://latex.codecogs.com/svg.image?2^{48}) that would have a hash value with 12 leading zeros. The Bitcoin network has a global block difficulty. The mining difficulty formula is defined below.
+Bitcoin mining is designed to find a string <i>s</i> such that the sha512 has <i>n</i> leading zeros, where <i>n</i> determines the mining difficulty [13]. The probability of calculating a hash that starts with many zeros is very low, therefore many attemps must be made. Difficulty is a value used to show how hard is it to find a hash that will be lower than a specific target defined by system, for example a hash with twelve leading zeros. Imagine a hash is only three digits long. If there is no leading zero ("999") then there are a thousand possible numbers (0-999) that are lower than that specific hash. If there is one leading zero ("099"), there are now only one hundred possible numbers lower than that hash value. The same idea relates to a hash with twelve leading zeros. The more leading zeros a value has, the longer and more difficult it will be to find, aswell as the additional computing power it will acquire. As a result there would be around ![equation13](https://latex.codecogs.com/svg.image?2^{48}) values that would have a hash with 12 leading zeros. The Bitcoin network has a global block difficulty. The mining difficulty formula is defined below.
 
 ```difficulty = difficulty_1_target / current_target```
 
@@ -325,6 +350,12 @@ https://privacycanada.net/hash-functions/why-are-hashes-irreversible/ <br>
 https://bitcoin.stackexchange.com/questions/85896/mining-difficulty-and-leading-zeros <br>
 [14] Luno, Bitcoin’s hash rate is hitting record highs, but does it even matter?, <br>
 https://www.luno.com/blog/en/post/bitcoins-hash-rate-is-hitting-record-highs-but-does-it-even-matter <br>
+[15] GeeksforGeeks, Introduction to quantum computing, <br>
+https://www.geeksforgeeks.org/introduction-quantum-computing/ <br>
+[16] Privacy Canada, Hash Collision Attack, <br>
+https://privacycanada.net/hash-functions/hash-collision-attack/ <br>
+[17] ScienceDirect, Hash Collision, <br>
+https://www.sciencedirect.com/topics/computer-science/hash-collision <br>
 
 ## Google Scholar Referances
 [A1] Sumagita, M., Riadi, I., Sh, J.P.D.S. and Warungboto, U., 2018. Analysis of secure hash algorithm (SHA) 512 for encryption process on web based application. International Journal of Cyber-Security and Digital Forensics (IJCSDF), 7(4), pp.373-381. <br>
